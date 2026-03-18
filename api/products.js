@@ -1,32 +1,3 @@
-// api/products.js
-export default async function handler(req, res) {
-  // 1️⃣ الدولة المطلوبة: us, ca, pl, eg
-  const country = req.query.country || "us";
+// api/products.js export default async function handler(req, res) { const country = req.query.country || "us"; const affiliateTags = { us: "koloonlinesto-20", ca: "onlinesho0429-20", pl: "koloonline-21", eg: "onlinesh03f31-21" };
 
-  // 2️⃣ Affiliate Tags لكل دولة
-  const affiliateTags = {
-    us: "koloonlinesto-20",
-    ca: "onlinesho0429-20",
-    pl: "koloonline-21",
-    eg: "onlinesh03f31-21"
-  };
-
-  // 3️⃣ منتجات تجريبية (يمكن استبدالها لاحقًا ببيانات Amazon API)
-  const products = [
-    {
-      title: "سماعة Anker Speakerphone",
-      image: "https://m.media-amazon.com/images/I/71tV4O0rO0L._AC_SL1500_.jpg",
-      asin: "B07ZNT7PRL",
-      affiliate_link: `https://www.amazon.${country === "eg" ? "eg" : country === "pl" ? "pl" : country === "ca" ? "ca" : "com"}/dp/B07ZNT7PRL?tag=${affiliateTags[country]}`
-    },
-    {
-      title: "سكين HOSHANHO الياباني",
-      image: "https://m.media-amazon.com/images/I/81pZ9n52llL._AC_SL1500_.jpg",
-      asin: "B0CKMF6GPZ",
-      affiliate_link: `https://www.amazon.${country === "eg" ? "eg" : country === "pl" ? "pl" : country === "ca" ? "ca" : "com"}/dp/B0CKMF6GPZ?tag=${affiliateTags[country]}`
-    }
-  ];
-
-  // 4️⃣ إعادة المنتجات كـ JSON
-  res.status(200).json(products);
-}
+// أفضل 10 منتجات Amazon (نماذج حقيقية، يمكن تحديثها تلقائياً لاحقاً) const products = [ { title: "Echo Dot (5th Gen) Smart Speaker", image: "https://m.media-amazon.com/images/I/61u0y9ADElL.AC_SL1000.jpg", video: "https://www.youtube.com/watch?v=Bwz8Tx75YU", price: "$49.99", discount: "$39.99", rating: 4.7, asin: "B09B8Q3YHJ", affiliate_link: https://www.amazon.${country === 'eg' ? 'eg' : country === 'pl' ? 'pl' : country === 'ca' ? 'ca' : 'com'}/dp/B09B8Q3YHJ?tag=${affiliateTags[country]} }, { title: "Fire TV Stick 4K", image: "https://m.media-amazon.com/images/I/51CgKGfMelL.AC_SL1000.jpg", video: "https://www.youtube.com/watch?v=VIDEO_ID", price: "$59.99", discount: "$49.99", rating: 4.8, asin: "B08XVYZ1Y5", affiliate_link: https://www.amazon.${country === 'eg' ? 'eg' : country === 'pl' ? 'pl' : country === 'ca' ? 'ca' : 'com'}/dp/B08XVYZ1Y5?tag=${affiliateTags[country]} }, { title: "Kindle Paperwhite", image: "https://m.media-amazon.com/images/I/61fPYvC5RAL.AC_SL1000.jpg", video: "https://www.youtube.com/watch?v=VIDEO_ID2", price: "$129.99", discount: "$99.99", rating: 4.6, asin: "B08N36XNTT", affiliate_link: https://www.amazon.${country === 'eg' ? 'eg' : country === 'pl' ? 'pl' : country === 'ca' ? 'ca' : 'com'}/dp/B08N36XNTT?tag=${affiliateTags[country]} }, { title: "Anker Soundcore Bluetooth Speaker", image: "https://m.media-amazon.com/images/I/71o8Q5XfWkL.AC_SL1500.jpg", video: "https://www.youtube.com/watch?v=VIDEO_ID3", price: "$59.99", discount: "$44.99", rating: 4.5, asin: "B07XJ8C8F5", affiliate_link: https://www.amazon.${country === 'eg' ? 'eg' : country === 'pl' ? 'pl' : country === 'ca' ? 'ca' : 'com'}/dp/B07XJ8C8F5?tag=${affiliateTags[country]} }, { title: "Apple AirPods Pro", image: "https://m.media-amazon.com/images/I/71bhWgQK-cL.AC_SL1500.jpg", video: "https://www.youtube.com/watch?v=VIDEO_ID4", price: "$249.00", discount: "$199.00", rating: 4.8, asin: "B07ZPC9QD4", affiliate_link: https://www.amazon.${country === 'eg' ? 'eg' : country === 'pl' ? 'pl' : country === 'ca' ? 'ca' : 'com'}/dp/B07ZPC9QD4?tag=${affiliateTags[country]} }, { title: "Fitbit Charge 5", image: "https://m.media-amazon.com/images/I/71smqRr0pmL.AC_SL1500.jpg", video: "https://www.youtube.com/watch?v=VIDEO_ID5", price: "$179.95", discount: "$149.95", rating: 4.4, asin: "B09BXQ6B4L", affiliate_link: https://www.amazon.${country === 'eg' ? 'eg' : country === 'pl' ? 'pl' : country === 'ca' ? 'ca' : 'com'}/dp/B09BXQ6B4L?tag=${affiliateTags[country]} }, { title: "Samsung Galaxy Buds Pro", image: "https://m.media-amazon.com/images/I/71iUqAb9zqL.AC_SL1500.jpg", video: "https://www.youtube.com/watch?v=VIDEO_ID6", price: "$199.99", discount: "$179.99", rating: 4.6, asin: "B08MWZHHKP", affiliate_link: https://www.amazon.${country === 'eg' ? 'eg' : country === 'pl' ? 'pl' : country === 'ca' ? 'ca' : 'com'}/dp/B08MWZHHKP?tag=${affiliateTags[country]} }, { title: "Logitech MX Master 3", image: "https://m.media-amazon.com/images/I/61f6ZpuWdWL.AC_SL1500.jpg", video: "https://www.youtube.com/watch?v=VIDEO_ID7", price: "$99.99", discount: "$79.99", rating: 4.7, asin: "B07S395RWD", affiliate_link: https://www.amazon.${country === 'eg' ? 'eg' : country === 'pl' ? 'pl' : country === 'ca' ? 'ca' : 'com'}/dp/B07S395RWD?tag=${affiliateTags[country]} }, { title: "Roku Streaming Stick+", image: "https://m.media-amazon.com/images/I/61SU5vHNL-L.AC_SL1500.jpg", video: "https://www.youtube.com/watch?v=VIDEO_ID8", price: "$49.99", discount: "$39.99", rating: 4.5, asin:

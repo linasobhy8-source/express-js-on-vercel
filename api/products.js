@@ -1,9 +1,6 @@
-// api/products.js
-export default async function handler(req, res) {
-  // 1️⃣ الدولة المطلوبة: us, ca, pl, eg
+export default function handler(req, res) {
   const country = req.query.country || "us";
 
-  // 2️⃣ Affiliate Tags لكل دولة
   const affiliateTags = {
     us: "koloonlinesto-20",
     ca: "onlinesho0429-20",
@@ -11,22 +8,40 @@ export default async function handler(req, res) {
     eg: "onlinesh03f31-21"
   };
 
-  // 3️⃣ منتجات تجريبية (يمكن استبدالها لاحقًا ببيانات Amazon API)
+  const domain =
+    country === "eg"
+      ? "amazon.eg"
+      : country === "pl"
+      ? "amazon.pl"
+      : country === "ca"
+      ? "amazon.ca"
+      : "amazon.com";
+
+  const tag = affiliateTags[country] || affiliateTags.us;
+
   const products = [
     {
-      title: "سماعة Anker Speakerphone",
-      image: "https://m.media-amazon.com/images/I/71tV4O0rO0L._AC_SL1500_.jpg",
-      asin: "B07ZNT7PRL",
-      affiliate_link: `https://www.amazon.${country === "eg" ? "eg" : country === "pl" ? "pl" : country === "ca" ? "ca" : "com"}/dp/B07ZNT7PRL?tag=${affiliateTags[country]}`
+      title: "Echo Dot (5th Gen)",
+      price: "$49.99",
+      rating: 4.7,
+      image: "https://m.media-amazon.com/images/I/61u0y9ADElL._AC_SL1000_.jpg",
+      link: `https://${domain}/dp/B09B8Q3YHJ?tag=${tag}`
     },
     {
-      title: "سكين HOSHANHO الياباني",
-      image: "https://m.media-amazon.com/images/I/81pZ9n52llL._AC_SL1500_.jpg",
-      asin: "B0CKMF6GPZ",
-      affiliate_link: `https://www.amazon.${country === "eg" ? "eg" : country === "pl" ? "pl" : country === "ca" ? "ca" : "com"}/dp/B0CKMF6GPZ?tag=${affiliateTags[country]}`
+      title: "Fire TV Stick 4K",
+      price: "$59.99",
+      rating: 4.8,
+      image: "https://m.media-amazon.com/images/I/51CgKGfMelL._AC_SL1000_.jpg",
+      link: `https://${domain}/dp/B08XVYZ1Y5?tag=${tag}`
+    },
+    {
+      title: "Kindle Paperwhite",
+      price: "$129.99",
+      rating: 4.6,
+      image: "https://m.media-amazon.com/images/I/61fPYvC5RAL._AC_SL1000_.jpg",
+      link: `https://${domain}/dp/B08N36XNTT?tag=${tag}`
     }
   ];
 
-  // 4️⃣ إعادة المنتجات كـ JSON
   res.status(200).json(products);
 }

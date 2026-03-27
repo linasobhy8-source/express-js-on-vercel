@@ -1,30 +1,37 @@
-# Koloonline Store
+# 🔥 Koloonline Store 2026
 
-🔥 **Koloonline Store** هو متجر أفلييت حديث (2026) يعمل على **Express.js** و **Vercel**، ويعرض منتجات أمازون مع **روابط أفلييت مباشرة**، يحتوي على واجهة احترافية، Slider للمنتجات المميزة، Search مباشر، وCheckout جاهز.
-
----
-
-## المميزات
-
-- ✅ واجهة مستخدم حديثة وResponsive
-- ✅ عرض المنتجات في Grid + Slider للمنتجات المميزة
-- ✅ تصفية المنتجات حسب التصنيف (Electronics / Home / Kitchen)
-- ✅ بحث مباشر (Live Search)
-- ✅ Checkout مباشر مع تتبع التحويلات
-- ✅ تتبع التحويلات باستخدام **Google Analytics 4** و **Facebook Pixel**
-- ✅ متوافق للنشر على **Vercel** مباشرة
+🚀 متجر أفلييت احترافي يعرض أفضل منتجات Amazon مع نظام تتبع وتحويل متكامل  
+مبني باستخدام **Express.js + Vercel**
 
 ---
 
-## المتطلبات
+## 💰 المميزات (نسخة بتبيع فعلاً)
 
-- Node.js >= 18
-- npm >= 9
+- ✅ منتجات حقيقية بروابط أفلييت مباشرة
+- ✅ UI احترافي وسريع (Mobile + Desktop)
+- ✅ Live Search + Categories
+- ✅ Slider للمنتجات المميزة
+- ✅ Funnel بيع (Product → Checkout → Thank You)
+- ✅ Tracking كامل:
+  - Facebook Pixel
+  - Google Analytics 4
+- ✅ Ads جاهزة (AdSense)
+- ✅ Dashboard لقياس الأداء
 
 ---
 
-## الإعداد والتشغيل
+## ⚙️ التشغيل على جهازك
 
-1. استنساخ المشروع:
+### 1️⃣ تثبيت Node.js
+
+حمّلي Node من هنا:  
+👉 https://nodejs.org
+
+---
+
+### 2️⃣ تثبيت الحزم
+
+افتحي Terminal داخل المشروع واكتبي:
+
 ```bash
-git clone <repository-url>
+npm install

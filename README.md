@@ -1,31 +1,30 @@
-# Express.js on Vercel
+# Koloonline Store
 
-Basic Express.js + Vercel example that serves html content, JSON data and simulates an api route.
+🔥 **Koloonline Store** هو متجر أفلييت حديث (2026) يعمل على **Express.js** و **Vercel**، ويعرض منتجات أمازون مع **روابط أفلييت مباشرة**، يحتوي على واجهة احترافية، Slider للمنتجات المميزة، Search مباشر، وCheckout جاهز.
 
-## How to Use
+---
 
-You can choose from one of the following two methods to use this repository:
+## المميزات
 
-### One-Click Deploy
+- ✅ واجهة مستخدم حديثة وResponsive
+- ✅ عرض المنتجات في Grid + Slider للمنتجات المميزة
+- ✅ تصفية المنتجات حسب التصنيف (Electronics / Home / Kitchen)
+- ✅ بحث مباشر (Live Search)
+- ✅ Checkout مباشر مع تتبع التحويلات
+- ✅ تتبع التحويلات باستخدام **Google Analytics 4** و **Facebook Pixel**
+- ✅ متوافق للنشر على **Vercel** مباشرة
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+---
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/examples/tree/main/solutions/express&project-name=express&repository-name=express)
+## المتطلبات
 
-### Clone and Deploy
+- Node.js >= 18
+- npm >= 9
 
+---
+
+## الإعداد والتشغيل
+
+1. استنساخ المشروع:
 ```bash
-git clone https://github.com/vercel/examples/tree/main/solutions/express
-```
-
-Install the Vercel CLI:
-
-```bash
-npm i -g vercel
-```
-
-Then run the app at the root of the repository:
-
-```bash
-vercel dev
-```
+git clone <repository-url>

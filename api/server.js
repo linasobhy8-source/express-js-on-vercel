@@ -1,64 +1,58 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static("public"));
+app.use(express.static('public'));
 
-// 🔥 Dummy Products
+// API: Products
 const products = [
   {
     id: 1,
     title: "Smart Watch Pro",
     category: "electronics",
     price: "$39.99",
-    image: "https://m.media-amazon.com/images/I/61IMRs+o.jpg",
     rating: 4.5,
-    affiliate_link: "https://amzn.to/3xxxx"
+    image: "https://m.media-amazon.com/images/I/61IMRs+oXyL._AC_SL1500_.jpg",
+    affiliate_link: "https://www.amazon.com/dp/B09V7Z4TJG?tag=koloonlinesto-20"
   },
   {
     id: 2,
     title: "Wireless Earbuds",
     category: "electronics",
     price: "$29.99",
-    image: "https://m.media-amazon.com/images/I/71xxxx.jpg",
-    rating: 4.2,
-    affiliate_link: "https://amzn.to/3xxxx"
+    rating: 4.3,
+    image: "https://m.media-amazon.com/images/I/71v9z1k4a7L._AC_SL1500_.jpg",
+    affiliate_link: "https://www.amazon.com/dp/B08T5GJ2M7?tag=koloonlinesto-20"
   },
   {
     id: 3,
-    title: "Kitchen Mixer",
+    title: "Air Fryer 5L",
     category: "kitchen",
-    price: "$89.99",
-    image: "https://m.media-amazon.com/images/I/51xxxx.jpg",
-    rating: 4.7,
-    affiliate_link: "https://amzn.to/3xxxx"
+    price: "$59.99",
+    rating: 4.6,
+    image: "https://m.media-amazon.com/images/I/81v8b8h50EL._AC_SL1500_.jpg",
+    affiliate_link: "https://www.amazon.com/dp/B08CVL1SV6?tag=koloonlinesto-20"
+  },
+  {
+    id: 4,
+    title: "Home LED Lamp",
+    category: "home",
+    price: "$19.99",
+    rating: 4.2,
+    image: "https://m.media-amazon.com/images/I/61HqX8pU7FL._AC_SL1500_.jpg",
+    affiliate_link: "https://www.amazon.com/dp/B08XYT4JX7?tag=koloonlinesto-20"
   }
 ];
 
-// API: Get products by country (dummy)
-app.get("/api/products", (req, res) => {
+// GET products
+app.get('/api/products', (req, res) => {
   const country = req.query.country || "us";
+  // يمكنك إضافة فلترة حسب البلد هنا إذا أردت
   res.json(products);
 });
 
-// API: Track order (dummy)
-let orders = [];
-app.post("/api/order", (req, res) => {
-  const { title, link, price } = req.body;
-  const order = { id: orders.length + 1, title, link, price, date: new Date() };
-  orders.push(order);
-  res.json({ success: true, order });
-});
-
-// API: Dashboard stats
-app.get("/api/stats", (req, res) => {
-  const totalOrders = orders.length;
-  const totalRevenue = orders.reduce((acc, o) => acc + parseFloat(o.price.replace("$", "")), 0);
-  res.json({ totalOrders, totalRevenue, orders });
-});
-
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

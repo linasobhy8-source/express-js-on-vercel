@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>🔥 Koloonline Store | Best Amazon Deals 2026</title>
+<meta name="description" content="Best Amazon deals, smart watches, gadgets and trending products.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Favicon -->
+<link rel="icon" href="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YS8L61XLPR"></script>
+<script>
+window.dataLayer = window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-YS8L61XLPR');
+</script>
+
+<!-- Facebook Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0].parentNode.insertBefore(t,s)}
+(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','353894198840203');fbq('track','PageView');
+</script>
+
+<!-- AdSense Top -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1294940976431468"
+     crossorigin="anonymous"></script>
+
+<style>
+body{font-family:Arial,sans-serif;margin:0;padding:0;background:#f5f5f5;}
+header{background:#232f3e;color:#fff;padding:15px 20px;font-size:24px;text-align:center;font-weight:bold;}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;background:#37475a;color:#fff;}
+.navbar input{width:50%;padding:8px;border-radius:4px;border:none;font-size:16px;}
+.navbar button{padding:9px 15px;background:#ff9900;border:none;border-radius:4px;font-weight:bold;cursor:pointer;}
+.categories{display:flex;gap:10px;padding:10px;overflow-x:auto;}
+.categories button{padding:8px 15px;background:#ddd;border:none;border-radius:5px;cursor:pointer;transition:0.3s;}
+.categories button:hover{background:#ff9900;color:#fff;}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;padding:20px;}
+.card{background:#fff;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;transition:0.3s;}
+.card:hover{transform:scale(1.05);}
+.card img{width:100%;height:200px;object-fit:contain;background:#f9f9f9;}
+.card-content{padding:15px;flex-grow:1;}
+.card-content h3{font-size:18px;margin:5px 0;color:#111;min-height:48px;}
+.card-content p{font-size:16px;margin:5px 0;color:#b12704;font-weight:bold;}
+button.buy-btn{background:#ff9900;border:none;padding:12px;width:100%;border-radius:6px;cursor:pointer;font-weight:bold;transition:0.3s;}
+button.buy-btn:hover{background:#e68a00;}
+.rating{display:flex;align-items:center;margin:5px 0;}
+.rating span{color:#ffa41c;margin-right:3px;}
+.slider{display:flex;overflow-x:auto;gap:15px;padding:10px;}
+.slider::-webkit-scrollbar{display:none;}
+</style>
+</head>
+<body>
+
+<header>🔥 Koloonline Store</header>
+
+<div class="navbar">
+  <input type="text" id="searchInput" placeholder="Search products..." onkeyup="liveSearch()">
+  <button onclick="viewCart()">Cart 🛒</button>
+</div>
+
+<div class="categories">
+  <button onclick="filterCategory('all')">All</button>
+  <button onclick="filterCategory('electronics')">Electronics</button>
+  <button onclick="filterCategory('home')">Home</button>
+  <button onclick="filterCategory('kitchen')">Kitchen</button>
+</div>
+
+<div class="slider" id="featuredProducts"></div>
+<div id="products" class="products"></div>
+
+<script>
+const country="us";
+let allProducts=[];
+
+// 🔥 Products API
+async function loadProducts(){
+  const res = await fetch(`/api/products?country=${country}`);
+  allProducts = await res.json();
+  displaySlider(allProducts.slice(0,5));
+  displayProducts(allProducts);
+}
+
+function displayProducts(products){
+  const container = document.getElementById("products");
+  let html = "";
+  products.forEach(item => {
+    html += `<div class="card">
+      <img src="${item.image}" alt="${item.title}">
+      <div class="card-content">
+        <h3>${item.title}</h3>
+        <div class="rating"><span>⭐</span>${item.rating}</div>
+        <p>${item.price}</p>
+      </div>
+      <button class="buy-btn" onclick="buyNow('${item.affiliate_link}')">🔥 Order Now</button>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function displaySlider(products){
+  const slider = document.getElementById("featuredProducts");
+  let html = "";
+  products.forEach(item => {
+    html += `<div class="card" style="min-width:250px;">
+      <img src="${item.image}" alt="${item.title}">
+      <div class="card-content"><h3>${item.title}</h3><p>${item.price}</p></div>
+      <button class="buy-btn" onclick="buyNow('${item.affiliate_link}')">🔥 Order Now</button>
+    </div>`;
+  });
+  slider.innerHTML = html;
+}
+
+function buyNow(link){
+  localStorage.setItem("product_link",link);
+  fbq('track','InitiateCheckout');gtag('event','begin_checkout');
+  window.location.href="/checkout.html";
+}
+
+function liveSearch(){
+  const query=document.getElementById("searchInput").value.toLowerCase();
+  displayProducts(allProducts.filter(p=>p.title.toLowerCase().includes(query)));
+}
+
+function filterCategory(cat){
+  if(cat==="all") displayProducts(allProducts);
+  else displayProducts(allProducts.filter(p=>p.category===cat));
+}
+
+function viewCart(){alert("Cart is empty!");}
+
+loadProducts();
+</script>
+
+</body>
+</html>

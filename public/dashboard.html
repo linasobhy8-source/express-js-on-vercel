@@ -10,12 +10,14 @@ body { font-family: Arial, sans-serif; margin:0; background:#f5f5f5; }
 header { background:#232f3e; color:#fff; padding:20px; font-size:24px; text-align:center; font-weight:bold; }
 .container { margin:15px; }
 .stats, .charts, .orders { background:#fff; padding:20px; border-radius:10px; margin-bottom:20px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
-.stats p { font-size:18px; }
+.stats p { font-size:18px; margin:8px 0; }
 .orders h2 { margin-top:0; }
 .order-item { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee; }
 .order-item:last-child { border-bottom:none; }
 .order-item span { font-weight:bold; }
 #countrySelect { margin-bottom:15px; padding:8px 12px; font-size:16px; border-radius:6px; border:1px solid #ccc; }
+.no-orders { text-align:center; padding:20px; color:#888; font-style:italic; }
+canvas { max-width:100%; }
 </style>
 </head>
 <body>
@@ -41,12 +43,13 @@ header { background:#232f3e; color:#fff; padding:20px; font-size:24px; text-alig
 
   <div class="orders">
     <h2>Recent Orders</h2>
-    <div id="ordersContainer"></div>
+    <div id="ordersContainer" class="no-orders">Loading orders...</div>
   </div>
 </div>
 
 <script>
 let allOrders = [];
+let dailyChartInstance, topProductsChartInstance;
 
 async function loadOrders() {
   const country = document.getElementById('countrySelect').value;
@@ -60,26 +63,32 @@ async function loadOrders() {
     displayOrders();
     renderDailyChart();
     renderTopProductsChart();
-  } catch(err) { console.error(err); }
+  } catch(err) { 
+    console.error(err);
+    document.getElementById('ordersContainer').innerHTML = "<div class='no-orders'>Error loading orders.</div>";
+  }
 }
 
 function displayOrders() {
   const container = document.getElementById('ordersContainer');
+  if(!allOrders.length) {
+    container.innerHTML = "<div class='no-orders'>No orders yet.</div>";
+    return;
+  }
   container.innerHTML = "";
   allOrders.slice().reverse().forEach(o=>{
     const div = document.createElement('div');
     div.className="order-item";
-    div.innerHTML=`<span>#${o._id} ${o.title}</span><span>$${o.price} - ${o.date ? o.date.split('T')[0] : ''}</span>`;
+    const orderDate = o.date ? new Date(o.date).toLocaleString() : '';
+    div.innerHTML=`<span>#${o._id} ${o.title}</span><span>$${o.price} - ${orderDate}</span>`;
     container.appendChild(div);
   });
 }
 
-let dailyChartInstance, topProductsChartInstance;
-
 function renderDailyChart() {
   const dailyData = {};
   allOrders.forEach(o => {
-    const date = o.date ? o.date.split('T')[0] : 'Unknown';
+    const date = o.date ? new Date(o.date).toLocaleDateString() : 'Unknown';
     dailyData[date] = (dailyData[date] || 0) + parseFloat(o.price);
   });
 
@@ -98,7 +107,14 @@ function renderDailyChart() {
         tension:0.3
       }]
     },
-    options:{responsive:true, plugins:{legend:{display:true}}}
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{display:true},
+        tooltip:{mode:'index', intersect:false}
+      },
+      interaction:{mode:'nearest', intersect:false}
+    }
   });
 }
 
@@ -114,9 +130,16 @@ function renderTopProductsChart() {
     type:'bar',
     data:{
       labels:sorted.map(e=>e[0]),
-      datasets:[{label:'Units Sold', data:sorted.map(e=>e[1]), backgroundColor:'#37475a'}]
+      datasets:[{
+        label:'Units Sold',
+        data:sorted.map(e=>e[1]),
+        backgroundColor:'#37475a'
+      }]
     },
-    options:{responsive:true, plugins:{legend:{display:false}}}
+    options:{
+      responsive:true,
+      plugins:{legend:{display:false}, tooltip:{enabled:true}}
+    }
   });
 }
 

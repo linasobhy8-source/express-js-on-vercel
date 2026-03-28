@@ -24,7 +24,7 @@ const products = [
       ? `https://www.amazon.com/dp/B09V7Z4TJG?tag=${process.env.AMAZON_US}`
       : "https://www.amazon.com/dp/B09V7Z4TJG"
   },
-  {
+  { 
     id: 2,
     title: "Wireless Earbuds",
     category: "electronics",

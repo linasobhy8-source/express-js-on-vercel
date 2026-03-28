@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const { SpeedInsights } = require('@vercel/speed-insights');
 
 const app = express();
 
@@ -86,6 +87,18 @@ app.get('/api/products', (req, res) => {
   });
 });
 
+// ================= API: SPEED INSIGHTS =================
+app.get('/api/speed', async (req, res) => {
+  try {
+    const url = req.query.url || "https://shop.koloonline.online"; // رابط الموقع
+    const result = await SpeedInsights(url, { strategy: "mobile" });
+    res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch speed insights" });
+  }
+});
+
 // ================= API: CHECK ENV =================
 app.get('/api/checkEnv', (req, res) => {
   const keys = [
@@ -101,7 +114,6 @@ app.get('/api/checkEnv', (req, res) => {
   ];
 
   const results = {};
-
   keys.forEach(key => {
     results[key] = !!process.env[key];
   });
@@ -125,4 +137,4 @@ module.exports = app;
 if (require.main === module) {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-    }
+      }

@@ -1,15 +1,16 @@
-body{font-family:Arial,sans-serif;margin:0;background:#f5f5f5}
-header{text-align:center;color:#fff}
-.hero{text-align:center;padding:25px;background:#fff}
-.navbar{display:flex;justify-content:center;gap:10px;margin:10px}
-.navbar input{padding:8px;width:40%}
-.buy-btn{background:#ff9900;color:#000;padding:10px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;display:flex;align-items:center;gap:6px}
-.buy-btn img{height:20px}
+body{font-family:Arial;margin:0;background:#f5f5f5}
+header img{display:block;margin:0 auto}
+.hero{text-align:center;background:#fff;padding:25px}
+.navbar{display:flex;justify-content:space-between;padding:10px;background:#37475a;flex-wrap:wrap;position:relative}
+.navbar input{width:45%;padding:8px;border:none;border-radius:4px}
+.navbar button{background:#ff9900;border:none;padding:8px;border-radius:4px;font-weight:bold;cursor:pointer;margin:3px}
+#suggestions{position:absolute;top:45px;left:10px;background:#fff;width:45%;z-index:999;border-radius:6px;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
+.filters{text-align:center;padding:10px}
 .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;padding:20px}
-.card{background:#fff;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);overflow:hidden;text-align:center}
+.card{background:#fff;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);overflow:hidden}
 .card img{width:100%;height:200px;object-fit:contain}
-.card-content{padding:10px}
+.card-content{text-align:center;padding:10px}
 .card-content p{color:#b12704;font-weight:bold}
-.filters{text-align:center;margin:10px}
-.dashboard-section{background:#fff;margin:15px;padding:15px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
-footer{text-align:center;padding:15px;background:#232f3e;color:#fff;margin-top:20px}
+.buy-btn{background:#ff9900;border:none;width:90%;margin:5px auto;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;font-weight:bold;cursor:pointer;border-radius:6px}
+.buy-btn img{height:18px}
+footer{background:#232f3e;color:#fff;text-align:center;padding:20px;margin-top:20px}

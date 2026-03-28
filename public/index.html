@@ -2,33 +2,36 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Koloonline Store | Best Smart Watches 2026</title>
-
-<!-- SEO -->
-<meta name="description" content="Koloonline Store - Best smart watches, gadgets, and trending products in 2026. Discover, compare, and buy with affiliate links.">
+<title>Koloonline Store 2026 | Best Amazon Deals</title>
+<meta name="description" content="Koloonline Store - Discover the best Amazon deals in electronics, smart watches, and gadgets.">
+<meta name="keywords" content="Amazon, smart watches, electronics, gadgets, Koloonline">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Koloonline Store - Best Smart Watches 2026">
-<meta name="twitter:description" content="Explore top smart watches and gadgets with affiliate deals on Koloonline.">
-<meta name="twitter:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
-
-<!-- Open Graph -->
-<meta property="og:title" content="Koloonline Store - Best Smart Watches 2026">
-<meta property="og:description" content="Explore top smart watches and gadgets with affiliate deals on Koloonline.">
+<!-- Open Graph & Twitter -->
+<meta property="og:title" content="Koloonline Store - Best Amazon Deals 2026">
+<meta property="og:description" content="Discover trending products and smart deals from Amazon.">
 <meta property="og:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
-<meta property="og:url" content="https://www.koloonline.online/">
 <meta property="og:site_name" content="Koloonline Store">
-<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.koloonline.online/">
 
-<!-- AdSense -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:title" content="Koloonline Store - Best Amazon Deals 2026">
+<meta property="twitter:description" content="Discover trending products and smart deals from Amazon.">
+<meta property="twitter:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
+
+<!-- Favicon -->
+<link rel="icon" href="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
+
+<!-- CSS -->
+<link rel="stylesheet" href="style.css">
+
+<!-- GTM -->
+<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-KNQM8KBN"></script>
+
+<!-- Ads (Google AdSense) -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1294940976431468" crossorigin="anonymous"></script>
 
-<link rel="icon" href="favicon.ico">
-<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <!-- HEADER -->
@@ -36,37 +39,60 @@
   <img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" alt="Koloonline Logo" style="height:70px;">
 </header>
 
-<!-- HERO -->
-<div class="hero">
-<h2>Your Global Connection 🌍</h2>
-<button onclick="scrollToProducts()" class="buy-btn">
-<img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" alt="logo"> Shop Now
-</button>
+<!-- NAV -->
+<div style="text-align:center; margin:15px;">
+  <button onclick="location.href='dashboard.html'" class="buy-btn">📊 Dashboard</button>
+  <button onclick="location.href='blog.html'" class="buy-btn">📰 Blog</button>
 </div>
 
 <!-- SEARCH -->
-<div class="navbar">
-<input type="text" id="searchInput" placeholder="Search products..." oninput="smartSuggest()">
-<div id="suggestions"></div>
-<button>Cart 🛒 (<span id="cartCount">0</span>)</button>
+<div style="text-align:center; margin:20px;">
+  <input type="text" id="searchInput" placeholder="Search products..." style="padding:8px; width:60%;">
+  <button onclick="searchProducts()" class="buy-btn">🔍 Search</button>
 </div>
 
-<!-- FILTER -->
-<div class="filters">
-<button onclick="filterCategory('all')">All</button>
-<button onclick="filterCategory('electronics')">Electronics</button>
-<button onclick="filterCategory('wearables')">Wearables</button>
+<!-- PRODUCTS GRID -->
+<div class="products" id="productsContainer">
+  <!-- Products injected dynamically via JS -->
 </div>
 
-<!-- PRODUCTS -->
-<div id="products" class="products"></div>
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+const country = "US"; // يمكن تغييره: US, CA, EG, PL
+const container = document.getElementById("productsContainer");
 
-<!-- FOOTER -->
-<footer>
-<img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" style="height:30px"><br>
-<p>© 2026 Koloonline</p>
-</footer>
+// Fetch products from API
+async function fetchProducts(search=""){
+  try{
+    const res = await axios.get(`/api/products?country=${country}&search=${search}`);
+    container.innerHTML = "";
+    res.data.products.forEach(p=>{
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `
+        <h3>${p.title}</h3>
+        <img src="${p.image}" alt="${p.title}" style="width:100%;height:auto;">
+        <p>Price: ${p.price}</p>
+        <p>Rating: ⭐ ${p.rating}</p>
+        <button class="buy-btn" onclick="window.open('${p.affiliate_link}','_blank')">🔥 Buy Now</button>
+      `;
+      container.appendChild(div);
+    });
+  }catch(e){
+    container.innerHTML = "<p>Failed to load products.</p>";
+  }
+}
 
-<script src="main.js"></script>
+// Search
+function searchProducts(){
+  const q = document.getElementById("searchInput").value;
+  fetchProducts(q);
+}
+
+// Initial Load
+fetchProducts();
+</script>
+
 </body>
 </html>

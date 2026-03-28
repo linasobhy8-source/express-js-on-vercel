@@ -74,13 +74,9 @@ function submitOrder(){
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({product:{title:product_title,price:product_price,link:product_link},user:{name,email,address}})
   }).then(res=>res.json()).then(d=>{
-    if(d.success) window.location.href="thankyou.html";
+    if(d.status==="success") window.location.href="thankyou.html";
   });
 }
 
-// Dashboard stats
-async function loadDashboard(){
-  const res = await fetch('/api/orders');
-  const orders = await res.json();
-  const totalOrders = orders.length;
-  const totalRevenue = orders.reduce((a,o)=>a+parseFloat(o.product.price.replace('$','')),0);
+// Initialize
+loadProducts();

@@ -2,188 +2,172 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>📊 Advanced Dashboard | Koloonline Store</title>
+<title>Koloonline Dashboard | Sales & Analytics</title>
+<meta name="description" content="Koloonline Store - Track product clicks, WhatsApp orders, and estimated revenue with live charts.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- GA -->
+<!-- Google Tag Manager -->
+<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-KNQM8KBN"></script>
+<!-- GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YS8L61XLPR"></script>
 <script>
-window.dataLayer = window.dataLayer||[];
+window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config','G-YS8L61XLPR');
+gtag('config', 'G-YS8L61XLPR');
 </script>
 
-<!-- Facebook Pixel -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0].parentNode.insertBefore(t,s)}
-(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','353894198840203');fbq('track','PageView');
-</script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Favicon -->
+<link rel="icon" href="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
 
 <style>
-body{font-family:Arial,sans-serif;margin:0;background:#f5f5f5;}
-header{background:#232f3e;color:#fff;padding:20px;font-size:24px;text-align:center;font-weight:bold;}
-.container{margin:15px;}
-.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;}
-.filters select,input{padding:8px 12px;border-radius:6px;border:1px solid #ccc;font-size:16px;}
-.stats,.charts,.orders{background:#fff;padding:20px;border-radius:10px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
-.stats p{font-size:18px;margin:8px 0;}
-.orders h2{margin-top:0;}
-.order-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee;}
-.order-item:last-child{border-bottom:none;}
-.order-item span{font-weight:bold;}
-.no-orders{text-align:center;padding:20px;color:#888;font-style:italic;}
-canvas{max-width:100%;}
+body{font-family:Arial,sans-serif;margin:0;background:#f5f5f5;color:#232f3e}
+header{background:#232f3e;color:#fff;padding:15px;text-align:center;display:flex;align-items:center;justify-content:center;gap:15px;}
+header img{height:50px;}
+h2,h3{margin:10px 0;}
+.container{max-width:1200px;margin:20px auto;padding:10px;}
+.card{background:#fff;padding:15px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);margin-bottom:20px;}
+.card.top{border:2px solid #ff9900;}
+.flex{display:flex;flex-wrap:wrap;gap:20px;}
+.flex>div{flex:1 1 250px;}
+canvas{background:#fff;border-radius:10px;padding:10px;}
 </style>
 </head>
+
 <body>
 
-<header>📊 Advanced Dashboard | Koloonline Store</header>
+<header>
+<img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" alt="Koloonline Logo">
+<span>Koloonline Dashboard</span>
+</header>
 
 <div class="container">
 
-  <div class="filters">
-    <select id="countrySelect" onchange="loadOrders()">
-      <option value="us">United States</option>
-      <option value="ca">Canada</option>
-      <option value="eg">Egypt</option>
-    </select>
+<!-- Overview -->
+<div class="card" id="overview">
+<h2>📊 Overview</h2>
+</div>
 
-    <select id="productSelect" onchange="loadOrders()">
-      <option value="all">All Products</option>
-    </select>
+<!-- Top Products -->
+<div class="card" id="topProducts">
+<h2>🏆 Top Products</h2>
+</div>
 
-    <input type="date" id="fromDate" onchange="loadOrders()">
-    <input type="date" id="toDate" onchange="loadOrders()">
-  </div>
+<!-- Country Distribution -->
+<div class="card" id="countries">
+<h2>🌍 Sales by Country</h2>
+</div>
 
-  <div class="stats">
-    <p>Total Orders: <span id="totalOrders">0</span></p>
-    <p>Total Revenue: $<span id="totalRevenue">0</span></p>
-  </div>
+<!-- Charts -->
+<div class="flex">
+<div class="card">
+<h3>Clicks per Product</h3>
+<canvas id="clickChart"></canvas>
+</div>
+<div class="card">
+<h3>WhatsApp Orders per Product</h3>
+<canvas id="whatsappChart"></canvas>
+</div>
+</div>
 
-  <div class="charts">
-    <canvas id="dailyChart" height="150"></canvas>
-    <canvas id="topProductsChart" height="150" style="margin-top:30px;"></canvas>
-  </div>
-
-  <div class="orders">
-    <h2>Recent Orders</h2>
-    <div id="ordersContainer" class="no-orders">Loading orders...</div>
-  </div>
 </div>
 
 <script>
-let allOrders = [];
-let dailyChartInstance, topProductsChartInstance;
+// ================= DATA =================
+// Load analytics from localStorage (simulate API)
+let analytics = JSON.parse(localStorage.getItem("analytics") || "{}");
 
-// Load orders from API
-async function loadOrders(){
-  const country = document.getElementById('countrySelect').value;
-  const selectedProduct = document.getElementById('productSelect').value;
-  const fromDate = document.getElementById('fromDate').value;
-  const toDate = document.getElementById('toDate').value;
-
-  try{
-    const res = await fetch(`/api/order?country=${country}`);
-    allOrders = await res.json();
-
-    // Filter by product
-    let filtered = allOrders;
-    if(selectedProduct !== 'all') filtered = filtered.filter(o=>o.title===selectedProduct);
-
-    // Filter by date
-    if(fromDate) filtered = filtered.filter(o=>new Date(o.date) >= new Date(fromDate));
-    if(toDate) filtered = filtered.filter(o=>new Date(o.date) <= new Date(toDate));
-
-    document.getElementById('totalOrders').innerText = filtered.length;
-    document.getElementById('totalRevenue').innerText = filtered.reduce((sum,o)=>sum+parseFloat(o.price),0).toFixed(2);
-
-    displayOrders(filtered);
-    renderDailyChart(filtered);
-    renderTopProductsChart(filtered);
-    populateProductFilter();
-  }catch(err){
-    console.error(err);
-    document.getElementById('ordersContainer').innerHTML = "<div class='no-orders'>Error loading orders.</div>";
+// ================= TOTALS =================
+function calcTotals(){
+  let totalClicks=0, totalCart=0, totalWhatsapp=0;
+  for(let asin in analytics){
+    totalClicks += analytics[asin].click || 0;
+    totalCart += analytics[asin].cart || 0;
+    totalWhatsapp += analytics[asin].whatsapp || 0;
   }
+  return {totalClicks,totalCart,totalWhatsapp};
 }
 
-// Display orders
-function displayOrders(orders){
-  const container = document.getElementById('ordersContainer');
-  if(!orders.length){container.innerHTML="<div class='no-orders'>No orders found.</div>";return;}
-  container.innerHTML="";
-  orders.slice().reverse().forEach(o=>{
-    const div = document.createElement('div');
-    div.className="order-item";
-    const orderDate = o.date ? new Date(o.date).toLocaleString() : '';
-    div.innerHTML=`<span>#${o._id} ${o.title}</span><span>$${o.price} - ${orderDate}</span>`;
-    container.appendChild(div);
+// ================= RENDER OVERVIEW =================
+function renderOverview(){
+  let {totalClicks,totalCart,totalWhatsapp} = calcTotals();
+  let conversionRate = totalClicks ? ((totalWhatsapp/totalClicks)*100).toFixed(2) : 0;
+  let revenue = (totalWhatsapp*2).toFixed(2); // تقدير
+  document.getElementById("overview").innerHTML = `
+    <h2>📊 Overview</h2>
+    <p>🔥 Clicks: ${totalClicks}</p>
+    <p>🛒 Add to Cart: ${totalCart}</p>
+    <p>📲 WhatsApp Orders: ${totalWhatsapp}</p>
+    <p>📈 Conversion Rate: ${conversionRate}%</p>
+    <p>💰 Estimated Revenue: $${revenue}</p>
+  `;
+}
+
+// ================= TOP PRODUCTS =================
+function renderTopProducts(){
+  let arr=[];
+  for(let asin in analytics){
+    arr.push({asin, score: analytics[asin].whatsapp || 0});
+  }
+  arr.sort((a,b)=>b.score-a.score);
+  let html="<h2>🏆 Top Products</h2>";
+  arr.forEach((p,i)=>{
+    html+=`<div class="card ${i===0?'top':''}"><h3>${p.asin}</h3><p>Orders: ${p.score}</p></div>`;
+  });
+  document.getElementById("topProducts").innerHTML = html;
+}
+
+// ================= COUNTRY DISTRIBUTION =================
+function renderCountries(){
+  let countries={};
+  for(let asin in analytics){
+    if(analytics[asin].country){
+      for(let c in analytics[asin].country){
+        countries[c] = (countries[c]||0)+analytics[asin].country[c];
+      }
+    }
+  }
+  let html="<h2>🌍 Sales by Country</h2>";
+  for(let c in countries){
+    html+=`<p>${c}: ${countries[c]}</p>`;
+  }
+  document.getElementById("countries").innerHTML = html;
+}
+
+// ================= CHARTS =================
+let clickChart, whatsappChart;
+function renderCharts(){
+  let labels=[], clickData=[], whatsappData=[];
+  for(let asin in analytics){
+    labels.push(asin);
+    clickData.push(analytics[asin].click || 0);
+    whatsappData.push(analytics[asin].whatsapp || 0);
+  }
+
+  if(clickChart) clickChart.destroy();
+  clickChart = new Chart(document.getElementById("clickChart"),{
+    type:"bar",
+    data:{labels,datasets:[{label:"Clicks",data:clickData,backgroundColor:"#ff9900"}]},
+    options:{responsive:true,plugins:{legend:{display:false}}}
+  });
+
+  if(whatsappChart) whatsappChart.destroy();
+  whatsappChart = new Chart(document.getElementById("whatsappChart"),{
+    type:"bar",
+    data:{labels,datasets:[{label:"WhatsApp Orders",data:whatsappData,backgroundColor:"#4caf50"}]},
+    options:{responsive:true,plugins:{legend:{display:false}}}
   });
 }
 
-// Render daily revenue chart
-function renderDailyChart(orders){
-  const dailyData = {};
-  orders.forEach(o=>{
-    const date = o.date ? new Date(o.date).toLocaleDateString() : 'Unknown';
-    dailyData[date]=(dailyData[date]||0)+parseFloat(o.price);
-  });
-  const ctx = document.getElementById('dailyChart').getContext('2d');
-  if(dailyChartInstance) dailyChartInstance.destroy();
-  dailyChartInstance = new Chart(ctx,{
-    type:'line',
-    data:{
-      labels:Object.keys(dailyData),
-      datasets:[{
-        label:'Revenue per Day ($)',
-        data:Object.values(dailyData),
-        borderColor:'#ff9900',
-        backgroundColor:'rgba(255,153,0,0.2)',
-        fill:true,
-        tension:0.3
-      }]
-    },
-    options:{responsive:true,plugins:{legend:{display:true},tooltip:{mode:'index',intersect:false}},interaction:{mode:'nearest',intersect:false}}
-  });
-}
+// ================= INIT =================
+renderOverview();
+renderTopProducts();
+renderCountries();
+renderCharts();
 
-// Render top products chart
-function renderTopProductsChart(orders){
-  const productCount={};
-  orders.forEach(o=>productCount[o.title]=(productCount[o.title]||0)+1);
-  const sorted = Object.entries(productCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  const ctx = document.getElementById('topProductsChart').getContext('2d');
-  if(topProductsChartInstance) topProductsChartInstance.destroy();
-  topProductsChartInstance = new Chart(ctx,{
-    type:'bar',
-    data:{labels:sorted.map(e=>e[0]),datasets:[{label:'Units Sold',data:sorted.map(e=>e[1]),backgroundColor:'#37475a'}]},
-    options:{responsive:true,plugins:{legend:{display:false},tooltip:{enabled:true}}}
-  });
-}
-
-// Populate product filter
-function populateProductFilter(){
-  const productSelect = document.getElementById('productSelect');
-  const products = [...new Set(allOrders.map(o=>o.title))];
-  productSelect.innerHTML="<option value='all'>All Products</option>";
-  products.forEach(p=>{
-    const opt = document.createElement('option'); opt.value=p; opt.text=p;
-    productSelect.appendChild(opt);
-  });
-}
-
-// Initial load + refresh every 15s
-loadOrders();
-setInterval(loadOrders,15000);
 </script>
-
 </body>
 </html>

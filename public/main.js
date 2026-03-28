@@ -1,82 +1,35 @@
-let allProducts=[], country="us";
+let products = [
+  {title:"Smart Watch Pro", asin:"B09V7Z4TJG", price:39.99, category:"wearables", image:"https://m.media-amazon.com/images/I/61IMRs+o0iL._AC_SL1500_.jpg"},
+  {title:"Wireless Earbuds", asin:"B08T5GJ2M7", price:29.99, category:"electronics", image:"https://m.media-amazon.com/images/I/71v9z1k4a7L._AC_SL1500_.jpg"}
+];
 
-// Load products
-async function loadProducts(){
-  const res = await fetch(`/api/products?country=${country}`);
-  allProducts = await res.json();
-  displaySlider(allProducts.slice(0,5));
-  displayProducts(allProducts);
+function buildLink(asin,country="US"){
+  const tags = {
+    US:"koloonlinesto-20", CA:"linasobhy20d8-20", EG:"onlinesh03f31-21", PL:"koloonline-21"
+  };
+  return `https://www.amazon.com/dp/${asin}?tag=${tags[country] || tags.US}`;
 }
 
-// Display main products
-function displayProducts(products){
-  const container = document.getElementById("products");
-  if(!container) return;
-  container.innerHTML = products.map(p=>`
-    <div class="card">
-      <img src="${p.image}" alt="${p.title}">
+function displayProducts(list){
+  let html="";
+  list.forEach((p,i)=>{
+    html+=`<div class="card">
+      <img src="${p.image}">
       <div class="card-content">
         <h3>${p.title}</h3>
-        <div class="rating">⭐ ${p.rating}</div>
-        <p>${p.price}</p>
+        <p>$${p.price}</p>
       </div>
-      <button class="buy-btn" onclick="buyNow('${p.affiliate_link}','${p.title}','${p.price}')">🔥 Order Now</button>
-    </div>`).join('');
-}
-
-// Display slider
-function displaySlider(products){
-  const slider = document.getElementById("featuredProducts");
-  if(!slider) return;
-  slider.innerHTML = products.map(p=>`
-    <div class="card" style="min-width:250px;">
-      <img src="${p.image}" alt="${p.title}">
-      <div class="card-content"><h3>${p.title}</h3><p>${p.price}</p></div>
-      <button class="buy-btn" onclick="buyNow('${p.affiliate_link}','${p.title}','${p.price}')">🔥 Order Now</button>
-    </div>`).join('');
-}
-
-// Live search
-function liveSearch(){
-  const q = document.getElementById("searchInput").value.toLowerCase();
-  displayProducts(allProducts.filter(p=>p.title.toLowerCase().includes(q)));
-}
-
-// Filter category
-function filterCategory(cat){
-  if(cat==="all") displayProducts(allProducts);
-  else displayProducts(allProducts.filter(p=>p.category===cat));
-}
-
-// View cart
-function viewCart(){alert("Cart is empty!");}
-
-// Buy now -> Checkout
-function buyNow(link,title,price){
-  localStorage.setItem("product_link",link);
-  localStorage.setItem("product_title",title);
-  localStorage.setItem("product_price",price);
-  fbq('track','InitiateCheckout'); gtag('event','begin_checkout');
-  window.location.href="checkout.html";
-}
-
-// Submit order (Checkout)
-function submitOrder(){
-  const name=document.getElementById("name").value;
-  const email=document.getElementById("email").value;
-  const address=document.getElementById("address").value;
-  const product_title=localStorage.getItem("product_title");
-  const product_price=localStorage.getItem("product_price");
-  const product_link=localStorage.getItem("product_link");
-  if(!name||!email||!address){alert("Please fill all fields"); return;}
-  fetch('/api/order',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({product:{title:product_title,price:product_price,link:product_link},user:{name,email,address}})
-  }).then(res=>res.json()).then(d=>{
-    if(d.status==="success") window.location.href="thankyou.html";
+      <button class="buy-btn" onclick="window.open('${buildLink(p.asin)}','_blank')">
+        🔥 Buy Now
+      </button>
+    </div>`;
   });
+  document.getElementById("products").innerHTML=html;
 }
+displayProducts(products);
 
-// Initialize
-loadProducts();
+function smartSuggest(){
+  const q=document.getElementById("searchInput").value.toLowerCase();
+  const results=products.filter(p=>p.title.toLowerCase().includes(q));
+  displayProducts(results);
+}

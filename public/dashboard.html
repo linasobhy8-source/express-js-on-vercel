@@ -2,34 +2,66 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>📊 Live Dashboard | Koloonline Store</title>
+<title>📊 Advanced Dashboard | Koloonline Store</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- GA -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YS8L61XLPR"></script>
+<script>
+window.dataLayer = window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-YS8L61XLPR');
+</script>
+
+<!-- Facebook Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0].parentNode.insertBefore(t,s)}
+(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','353894198840203');fbq('track','PageView');
+</script>
+
 <style>
-body { font-family: Arial, sans-serif; margin:0; background:#f5f5f5; }
-header { background:#232f3e; color:#fff; padding:20px; font-size:24px; text-align:center; font-weight:bold; }
-.container { margin:15px; }
-.stats, .charts, .orders { background:#fff; padding:20px; border-radius:10px; margin-bottom:20px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
-.stats p { font-size:18px; margin:8px 0; }
-.orders h2 { margin-top:0; }
-.order-item { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee; }
-.order-item:last-child { border-bottom:none; }
-.order-item span { font-weight:bold; }
-#countrySelect { margin-bottom:15px; padding:8px 12px; font-size:16px; border-radius:6px; border:1px solid #ccc; }
-.no-orders { text-align:center; padding:20px; color:#888; font-style:italic; }
-canvas { max-width:100%; }
+body{font-family:Arial,sans-serif;margin:0;background:#f5f5f5;}
+header{background:#232f3e;color:#fff;padding:20px;font-size:24px;text-align:center;font-weight:bold;}
+.container{margin:15px;}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;}
+.filters select,input{padding:8px 12px;border-radius:6px;border:1px solid #ccc;font-size:16px;}
+.stats,.charts,.orders{background:#fff;padding:20px;border-radius:10px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+.stats p{font-size:18px;margin:8px 0;}
+.orders h2{margin-top:0;}
+.order-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee;}
+.order-item:last-child{border-bottom:none;}
+.order-item span{font-weight:bold;}
+.no-orders{text-align:center;padding:20px;color:#888;font-style:italic;}
+canvas{max-width:100%;}
 </style>
 </head>
 <body>
 
-<header>📊 Live Dashboard | Koloonline Store</header>
+<header>📊 Advanced Dashboard | Koloonline Store</header>
 
 <div class="container">
-  <select id="countrySelect" onchange="loadOrders()">
-    <option value="us">United States</option>
-    <option value="ca">Canada</option>
-    <option value="eg">Egypt</option>
-  </select>
+
+  <div class="filters">
+    <select id="countrySelect" onchange="loadOrders()">
+      <option value="us">United States</option>
+      <option value="ca">Canada</option>
+      <option value="eg">Egypt</option>
+    </select>
+
+    <select id="productSelect" onchange="loadOrders()">
+      <option value="all">All Products</option>
+    </select>
+
+    <input type="date" id="fromDate" onchange="loadOrders()">
+    <input type="date" id="toDate" onchange="loadOrders()">
+  </div>
 
   <div class="stats">
     <p>Total Orders: <span id="totalOrders">0</span></p>
@@ -51,32 +83,44 @@ canvas { max-width:100%; }
 let allOrders = [];
 let dailyChartInstance, topProductsChartInstance;
 
-async function loadOrders() {
+// Load orders from API
+async function loadOrders(){
   const country = document.getElementById('countrySelect').value;
-  try {
+  const selectedProduct = document.getElementById('productSelect').value;
+  const fromDate = document.getElementById('fromDate').value;
+  const toDate = document.getElementById('toDate').value;
+
+  try{
     const res = await fetch(`/api/order?country=${country}`);
     allOrders = await res.json();
 
-    document.getElementById('totalOrders').innerText = allOrders.length;
-    document.getElementById('totalRevenue').innerText = allOrders.reduce((sum,o)=>sum+parseFloat(o.price),0).toFixed(2);
+    // Filter by product
+    let filtered = allOrders;
+    if(selectedProduct !== 'all') filtered = filtered.filter(o=>o.title===selectedProduct);
 
-    displayOrders();
-    renderDailyChart();
-    renderTopProductsChart();
-  } catch(err) { 
+    // Filter by date
+    if(fromDate) filtered = filtered.filter(o=>new Date(o.date) >= new Date(fromDate));
+    if(toDate) filtered = filtered.filter(o=>new Date(o.date) <= new Date(toDate));
+
+    document.getElementById('totalOrders').innerText = filtered.length;
+    document.getElementById('totalRevenue').innerText = filtered.reduce((sum,o)=>sum+parseFloat(o.price),0).toFixed(2);
+
+    displayOrders(filtered);
+    renderDailyChart(filtered);
+    renderTopProductsChart(filtered);
+    populateProductFilter();
+  }catch(err){
     console.error(err);
     document.getElementById('ordersContainer').innerHTML = "<div class='no-orders'>Error loading orders.</div>";
   }
 }
 
-function displayOrders() {
+// Display orders
+function displayOrders(orders){
   const container = document.getElementById('ordersContainer');
-  if(!allOrders.length) {
-    container.innerHTML = "<div class='no-orders'>No orders yet.</div>";
-    return;
-  }
-  container.innerHTML = "";
-  allOrders.slice().reverse().forEach(o=>{
+  if(!orders.length){container.innerHTML="<div class='no-orders'>No orders found.</div>";return;}
+  container.innerHTML="";
+  orders.slice().reverse().forEach(o=>{
     const div = document.createElement('div');
     div.className="order-item";
     const orderDate = o.date ? new Date(o.date).toLocaleString() : '';
@@ -85,16 +129,16 @@ function displayOrders() {
   });
 }
 
-function renderDailyChart() {
+// Render daily revenue chart
+function renderDailyChart(orders){
   const dailyData = {};
-  allOrders.forEach(o => {
+  orders.forEach(o=>{
     const date = o.date ? new Date(o.date).toLocaleDateString() : 'Unknown';
-    dailyData[date] = (dailyData[date] || 0) + parseFloat(o.price);
+    dailyData[date]=(dailyData[date]||0)+parseFloat(o.price);
   });
-
   const ctx = document.getElementById('dailyChart').getContext('2d');
   if(dailyChartInstance) dailyChartInstance.destroy();
-  dailyChartInstance = new Chart(ctx, {
+  dailyChartInstance = new Chart(ctx,{
     type:'line',
     data:{
       labels:Object.keys(dailyData),
@@ -107,43 +151,36 @@ function renderDailyChart() {
         tension:0.3
       }]
     },
-    options:{
-      responsive:true,
-      plugins:{
-        legend:{display:true},
-        tooltip:{mode:'index', intersect:false}
-      },
-      interaction:{mode:'nearest', intersect:false}
-    }
+    options:{responsive:true,plugins:{legend:{display:true},tooltip:{mode:'index',intersect:false}},interaction:{mode:'nearest',intersect:false}}
   });
 }
 
-function renderTopProductsChart() {
+// Render top products chart
+function renderTopProductsChart(orders){
   const productCount={};
-  allOrders.forEach(o => { productCount[o.title] = (productCount[o.title]||0)+1; });
-
+  orders.forEach(o=>productCount[o.title]=(productCount[o.title]||0)+1);
   const sorted = Object.entries(productCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
-
   const ctx = document.getElementById('topProductsChart').getContext('2d');
   if(topProductsChartInstance) topProductsChartInstance.destroy();
   topProductsChartInstance = new Chart(ctx,{
     type:'bar',
-    data:{
-      labels:sorted.map(e=>e[0]),
-      datasets:[{
-        label:'Units Sold',
-        data:sorted.map(e=>e[1]),
-        backgroundColor:'#37475a'
-      }]
-    },
-    options:{
-      responsive:true,
-      plugins:{legend:{display:false}, tooltip:{enabled:true}}
-    }
+    data:{labels:sorted.map(e=>e[0]),datasets:[{label:'Units Sold',data:sorted.map(e=>e[1]),backgroundColor:'#37475a'}]},
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{enabled:true}}}
   });
 }
 
-// تحميل أولي وتحديث تلقائي كل 15 ثانية
+// Populate product filter
+function populateProductFilter(){
+  const productSelect = document.getElementById('productSelect');
+  const products = [...new Set(allOrders.map(o=>o.title))];
+  productSelect.innerHTML="<option value='all'>All Products</option>";
+  products.forEach(p=>{
+    const opt = document.createElement('option'); opt.value=p; opt.text=p;
+    productSelect.appendChild(opt);
+  });
+}
+
+// Initial load + refresh every 15s
 loadOrders();
 setInterval(loadOrders,15000);
 </script>

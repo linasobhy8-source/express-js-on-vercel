@@ -71,17 +71,23 @@ button.buy-btn:hover{background:#e68a00;}
 <div id="products" class="products"></div>
 
 <script>
-const country="us";
-let allProducts=[];
+const country = "us";
+let allProducts = [];
 
-async function loadProducts(){
-  const res = await fetch(`/api/products?country=${country}`);
-  allProducts = await res.json();
-  displaySlider(allProducts.slice(0,5));
-  displayProducts(allProducts);
+// Fetch products from API
+async function loadProducts() {
+  try {
+    const res = await fetch(`/api/products?country=${country}`);
+    allProducts = await res.json();
+    displaySlider(allProducts.slice(0,5));
+    displayProducts(allProducts);
+  } catch(err) {
+    console.error("Failed to load products:", err);
+  }
 }
 
-function displayProducts(products){
+// Display main products grid
+function displayProducts(products) {
   const container = document.getElementById("products");
   let html = "";
   products.forEach(item => {
@@ -98,7 +104,8 @@ function displayProducts(products){
   container.innerHTML = html;
 }
 
-function displaySlider(products){
+// Display featured products slider
+function displaySlider(products) {
   const slider = document.getElementById("featuredProducts");
   let html = "";
   products.forEach(item => {
@@ -111,28 +118,37 @@ function displaySlider(products){
   slider.innerHTML = html;
 }
 
-function buyNow(link,title,price){
-  fbq('track','InitiateCheckout');gtag('event','begin_checkout');
+// Handle Buy Now click
+function buyNow(link, title, price) {
+  fbq('track','InitiateCheckout');
+  gtag('event','begin_checkout', {items:[{name:title, price:price}]});
+
   fetch("/api/order",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({title,link,price})
   });
-  window.location.href="/checkout.html";
+  
+  window.open(link,"_blank"); // يفتح رابط الأفلييت مباشرة
 }
 
-function liveSearch(){
-  const query=document.getElementById("searchInput").value.toLowerCase();
-  displayProducts(allProducts.filter(p=>p.title.toLowerCase().includes(query)));
+// Live search function
+function liveSearch() {
+  const query = document.getElementById("searchInput").value.toLowerCase();
+  displayProducts(allProducts.filter(p => p.title.toLowerCase().includes(query)));
 }
 
-function filterCategory(cat){
-  if(cat==="all") displayProducts(allProducts);
-  else displayProducts(allProducts.filter(p=>p.category===cat));
+// Filter products by category
+function filterCategory(cat) {
+  if(cat === "all") displayProducts(allProducts);
+  else displayProducts(allProducts.filter(p => p.category.toLowerCase() === cat.toLowerCase()));
 }
 
-function viewCart(){alert("Cart is empty!");}
+function viewCart() {
+  alert("Cart is empty!");
+}
 
+// Initialize
 loadProducts();
 </script>
 

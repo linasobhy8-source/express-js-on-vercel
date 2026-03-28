@@ -2,16 +2,95 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard | Koloonline Store</title>
-<link rel="stylesheet" href="css/style.css">
+<title>📊 Dashboard | Koloonline Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f5f5f5;
+}
+header {
+  background: #232f3e;
+  color: #fff;
+  padding: 20px;
+  font-size: 24px;
+  text-align: center;
+  font-weight: bold;
+}
+#stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  background: #fff;
+  margin: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+#stats p {
+  font-size: 18px;
+}
+#orderList {
+  margin: 15px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+#orderList h2 {
+  margin-top: 0;
+}
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+.order-item:last-child {
+  border-bottom: none;
+}
+.order-item span {
+  font-weight: bold;
+}
+</style>
 </head>
 <body>
+
 <header>📊 Admin Dashboard</header>
+
 <div id="stats">
   <p>Total Orders: <span id="totalOrders">0</span></p>
   <p>Total Revenue: $<span id="totalRevenue">0</span></p>
 </div>
-<div id="orderList"></div>
-<script src="js/main.js"></script>
+
+<div id="orderList">
+  <h2>Recent Orders</h2>
+  <div id="ordersContainer">
+    <!-- Orders will be injected here -->
+  </div>
+</div>
+
+<script>
+// Example data (replace with fetch from /api/orders)
+const orders = [
+  {id: 1, title: "Smart Watch Pro", price: 39.99, date: "2026-03-28"},
+  {id: 2, title: "Wireless Earbuds", price: 29.99, date: "2026-03-28"},
+  {id: 3, title: "Air Fryer 5L", price: 59.99, date: "2026-03-27"}
+];
+
+// Update stats
+document.getElementById('totalOrders').innerText = orders.length;
+document.getElementById('totalRevenue').innerText = orders.reduce((sum,o)=>sum+o.price,0).toFixed(2);
+
+// Render order list
+const container = document.getElementById('ordersContainer');
+orders.forEach(order=>{
+  const div = document.createElement('div');
+  div.className = "order-item";
+  div.innerHTML = `<span>#${order.id} ${order.title}</span><span>$${order.price} - ${order.date}</span>`;
+  container.appendChild(div);
+});
+</script>
+
 </body>
 </html>

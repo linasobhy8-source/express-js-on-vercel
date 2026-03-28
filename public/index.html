@@ -2,126 +2,62 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Koloonline Store | Best Amazon Deals 2026</title>
-<meta name="description" content="Discover trending smart gadgets and products in 2026.">
+<title>Koloonline Store 2026</title>
+<meta name="description" content="Best Amazon deals, smart watches, gadgets and trending products.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- SEO / Social Preview -->
-<meta property="twitter:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:title" content="Koloonline Store - Best Smart Deals 2026">
-<meta property="twitter:description" content="Shop trending gadgets & smart watches with affiliate links worldwide.">
-<meta property="og:url" content="https://www.koloonline.online">
-<meta property="og:description" content="Shop trending gadgets & smart watches with affiliate links worldwide.">
-<meta property="og:title" content="Koloonline Store - Best Smart Deals 2026">
-<meta property="og:site_name" content="Koloonline">
+<!-- Open Graph & Twitter -->
+<meta property="og:title" content="Koloonline Store 2026">
+<meta property="og:description" content="Best Amazon deals, smart watches, gadgets and trending products.">
 <meta property="og:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
-<meta property="description" content="Best Amazon deals, smart watches, gadgets and trending products.">
+<meta property="og:url" content="https://www.koloonline.online">
+<meta property="og:site_name" content="Koloonline">
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:title" content="Koloonline Store 2026">
+<meta property="twitter:description" content="Best Amazon deals, smart watches, gadgets and trending products.">
+<meta property="twitter:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
 
-<!-- Favicon -->
-<link rel="icon" href="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
-
-<!-- AdSense -->
+<!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1294940976431468" crossorigin="anonymous"></script>
 
-<style>
-body{margin:0;font-family:Arial;background:#f5f5f5;}
-header{background:#232f3e;color:#fff;padding:15px;text-align:center;}
-header img{height:70px;}
-.navbar{display:flex;justify-content:space-between;padding:10px;background:#37475a;flex-wrap:wrap;}
-.navbar input{width:45%;padding:8px;border:none;border-radius:4px;}
-.navbar button{background:#ff9900;border:none;padding:8px;border-radius:4px;font-weight:bold;cursor:pointer;margin:3px;}
-#suggestions{position:absolute;top:45px;left:10px;background:#fff;width:45%;z-index:999;border-radius:6px;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
-.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;padding:20px;}
-.card{background:#fff;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);overflow:hidden;}
-.card img{width:100%;height:200px;object-fit:contain;}
-.card-content{text-align:center;padding:10px;}
-.card-content p{color:#b12704;font-weight:bold;}
-.buy-btn{background:#ff9900;border:none;width:90%;margin:5px auto;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;font-weight:bold;cursor:pointer;border-radius:6px;}
-.buy-btn img{height:18px;}
-footer{background:#232f3e;color:#fff;text-align:center;padding:20px;margin-top:20px;}
-</style>
-
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-  <img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" alt="Koloonline Logo">
+<header style="background:#232f3e; padding:15px; text-align:center;">
+  <img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" alt="Koloonline Logo" style="height:70px;">
 </header>
 
+<div class="hero">
+  <h2>Your Global Connection 🌍</h2>
+  <button onclick="scrollToProducts()" class="buy-btn">
+    🔥 Shop Now
+  </button>
+</div>
+
 <div class="navbar">
-  <input type="text" id="searchInput" placeholder="Search products..." oninput="smartSuggest()">
+  <input type="text" id="searchInput" placeholder="Search..." oninput="smartSuggest()">
   <div id="suggestions"></div>
   <button>Cart 🛒 (<span id="cartCount">0</span>)</button>
 </div>
 
-<div class="products" id="products"></div>
+<div class="filters">
+  <button onclick="filterCategory('all')">All</button>
+  <button onclick="filterCategory('electronics')">Electronics</button>
+  <button onclick="filterCategory('wearables')">Wearables</button>
+  <button onclick="filterCategory('kitchen')">Kitchen</button>
+</div>
+
+<div id="products" class="products"></div>
+
+<!-- Checkout Page Trigger -->
+<button onclick="location.href='checkout.html'" class="buy-btn" style="margin:20px auto; display:block;">Go to Checkout</button>
 
 <footer>
-<img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" style="height:30px"><br>
-<p>© 2026 Koloonline</p>
+  <img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" style="height:30px"><br>
+  <p>© 2026 Koloonline</p>
 </footer>
 
-<script>
-// fallback products
-let products=[
-  {id:1,title:"Smart Watch Pro",asin:"B09V7Z4TJG",price:39.99,category:"wearables",image:"https://m.media-amazon.com/images/I/61IMRs+o0iL._AC_SL1500_.jpg"},
-  {id:2,title:"Wireless Earbuds",asin:"B08T5GJ2M7",price:29.99,category:"electronics",image:"https://m.media-amazon.com/images/I/71v9z1k4a7L._AC_SL1500_.jpg"},
-  {id:3,title:"Air Fryer 5L",asin:"B08CVL1SV6",price:59.99,category:"kitchen",image:"https://m.media-amazon.com/images/I/81v8b8h50EL._AC_SL1500_.jpg"},
-  {id:4,title:"Home LED Lamp",asin:"B08XYT4JX7",price:19.99,category:"home",image:"https://m.media-amazon.com/images/I/61HqX8pU7FL._AC_SL1500_.jpg"}
-];
-
-function buildLink(asin,country){
-  const tags = {
-    US:"koloonlinesto-20",
-    CA:"linasobhy20d8-20",
-    EG:"onlinesh03f31-21",
-    PL:"koloonline-21"
-  };
-  const tag = tags[country||"US"];
-  return `https://www.amazon.com/dp/${asin}?tag=${tag}`;
-}
-
-function displayProducts(list){
-  let html="";
-  list.forEach((p,i)=>{
-    html+=`<div class="card">
-      <img src="${p.image}">
-      <div class="card-content"><h3>${p.title}</h3><p>$${p.price}</p></div>
-      <button class="buy-btn" onclick='cartAdd(${JSON.stringify(p)})'>
-      <img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png"> Add to Cart</button>
-      <button class="buy-btn" onclick='window.open("${buildLink(p.asin)}","_blank")'>
-      🔥 Buy Now</button>
-    </div>`;
-  });
-  document.getElementById("products").innerHTML=html;
-}
-
-function smartSuggest(){
-  let q=document.getElementById("searchInput").value.toLowerCase();
-  let results=products.filter(p=>p.title.toLowerCase().includes(q));
-  displayProducts(results);
-  let sug="";
-  results.slice(0,5).forEach(p=>{
-    sug+=`<div onclick="selectProduct('${p.title}')" style="padding:8px;cursor:pointer">${p.title}</div>`;
-  });
-  document.getElementById("suggestions").innerHTML=sug;
-}
-
-function selectProduct(t){
-  document.getElementById("searchInput").value=t;
-  document.getElementById("suggestions").innerHTML="";
-  smartSuggest();
-}
-
-// Cart
-let cart=JSON.parse(localStorage.getItem("cart")||"[]");
-function cartAdd(p){cart.push(p);localStorage.setItem("cart",JSON.stringify(cart));updateCart();}
-function updateCart(){document.getElementById("cartCount").innerText=cart.length;}
-updateCart();
-
-displayProducts(products);
-</script>
-
+<script src="main.js"></script>
 </body>
 </html>

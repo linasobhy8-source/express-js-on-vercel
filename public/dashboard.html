@@ -2,172 +2,41 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Koloonline Dashboard | Sales & Analytics</title>
-<meta name="description" content="Koloonline Store - Track product clicks, WhatsApp orders, and estimated revenue with live charts.">
+<title>Koloonline Dashboard | Analytics</title>
+
+<meta name="description" content="Koloonline Dashboard - Track clicks, cart additions, WhatsApp orders, and conversions in real-time.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google Tag Manager -->
-<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-KNQM8KBN"></script>
-<!-- GA4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YS8L61XLPR"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-YS8L61XLPR');
-</script>
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Koloonline Dashboard - Analytics">
+<meta name="twitter:description" content="Monitor affiliate product clicks, cart additions, and WhatsApp orders with Koloonline Dashboard.">
+<meta name="twitter:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
 
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Open Graph -->
+<meta property="og:title" content="Koloonline Dashboard - Analytics">
+<meta property="og:description" content="Monitor affiliate product clicks, cart additions, and WhatsApp orders with Koloonline Dashboard.">
+<meta property="og:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
+<meta property="og:url" content="https://www.koloonline.online/dashboard.html">
+<meta property="og:site_name" content="Koloonline Dashboard">
+<meta property="og:type" content="website">
 
-<!-- Favicon -->
-<link rel="icon" href="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1294940976431468" crossorigin="anonymous"></script>
 
-<style>
-body{font-family:Arial,sans-serif;margin:0;background:#f5f5f5;color:#232f3e}
-header{background:#232f3e;color:#fff;padding:15px;text-align:center;display:flex;align-items:center;justify-content:center;gap:15px;}
-header img{height:50px;}
-h2,h3{margin:10px 0;}
-.container{max-width:1200px;margin:20px auto;padding:10px;}
-.card{background:#fff;padding:15px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);margin-bottom:20px;}
-.card.top{border:2px solid #ff9900;}
-.flex{display:flex;flex-wrap:wrap;gap:20px;}
-.flex>div{flex:1 1 250px;}
-canvas{background:#fff;border-radius:10px;padding:10px;}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
-<header>
-<img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" alt="Koloonline Logo">
-<span>Koloonline Dashboard</span>
+<header style="background:#232f3e; padding:15px; text-align:center;">
+<img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" alt="Koloonline Logo" style="height:70px;">
+<h2>Dashboard Analytics</h2>
 </header>
 
-<div class="container">
+<div id="overview" class="dashboard-section"></div>
+<div id="topProducts" class="dashboard-section"></div>
+<canvas id="clickChart" style="width:100%; max-width:900px; margin:auto;"></canvas>
 
-<!-- Overview -->
-<div class="card" id="overview">
-<h2>📊 Overview</h2>
-</div>
-
-<!-- Top Products -->
-<div class="card" id="topProducts">
-<h2>🏆 Top Products</h2>
-</div>
-
-<!-- Country Distribution -->
-<div class="card" id="countries">
-<h2>🌍 Sales by Country</h2>
-</div>
-
-<!-- Charts -->
-<div class="flex">
-<div class="card">
-<h3>Clicks per Product</h3>
-<canvas id="clickChart"></canvas>
-</div>
-<div class="card">
-<h3>WhatsApp Orders per Product</h3>
-<canvas id="whatsappChart"></canvas>
-</div>
-</div>
-
-</div>
-
-<script>
-// ================= DATA =================
-// Load analytics from localStorage (simulate API)
-let analytics = JSON.parse(localStorage.getItem("analytics") || "{}");
-
-// ================= TOTALS =================
-function calcTotals(){
-  let totalClicks=0, totalCart=0, totalWhatsapp=0;
-  for(let asin in analytics){
-    totalClicks += analytics[asin].click || 0;
-    totalCart += analytics[asin].cart || 0;
-    totalWhatsapp += analytics[asin].whatsapp || 0;
-  }
-  return {totalClicks,totalCart,totalWhatsapp};
-}
-
-// ================= RENDER OVERVIEW =================
-function renderOverview(){
-  let {totalClicks,totalCart,totalWhatsapp} = calcTotals();
-  let conversionRate = totalClicks ? ((totalWhatsapp/totalClicks)*100).toFixed(2) : 0;
-  let revenue = (totalWhatsapp*2).toFixed(2); // تقدير
-  document.getElementById("overview").innerHTML = `
-    <h2>📊 Overview</h2>
-    <p>🔥 Clicks: ${totalClicks}</p>
-    <p>🛒 Add to Cart: ${totalCart}</p>
-    <p>📲 WhatsApp Orders: ${totalWhatsapp}</p>
-    <p>📈 Conversion Rate: ${conversionRate}%</p>
-    <p>💰 Estimated Revenue: $${revenue}</p>
-  `;
-}
-
-// ================= TOP PRODUCTS =================
-function renderTopProducts(){
-  let arr=[];
-  for(let asin in analytics){
-    arr.push({asin, score: analytics[asin].whatsapp || 0});
-  }
-  arr.sort((a,b)=>b.score-a.score);
-  let html="<h2>🏆 Top Products</h2>";
-  arr.forEach((p,i)=>{
-    html+=`<div class="card ${i===0?'top':''}"><h3>${p.asin}</h3><p>Orders: ${p.score}</p></div>`;
-  });
-  document.getElementById("topProducts").innerHTML = html;
-}
-
-// ================= COUNTRY DISTRIBUTION =================
-function renderCountries(){
-  let countries={};
-  for(let asin in analytics){
-    if(analytics[asin].country){
-      for(let c in analytics[asin].country){
-        countries[c] = (countries[c]||0)+analytics[asin].country[c];
-      }
-    }
-  }
-  let html="<h2>🌍 Sales by Country</h2>";
-  for(let c in countries){
-    html+=`<p>${c}: ${countries[c]}</p>`;
-  }
-  document.getElementById("countries").innerHTML = html;
-}
-
-// ================= CHARTS =================
-let clickChart, whatsappChart;
-function renderCharts(){
-  let labels=[], clickData=[], whatsappData=[];
-  for(let asin in analytics){
-    labels.push(asin);
-    clickData.push(analytics[asin].click || 0);
-    whatsappData.push(analytics[asin].whatsapp || 0);
-  }
-
-  if(clickChart) clickChart.destroy();
-  clickChart = new Chart(document.getElementById("clickChart"),{
-    type:"bar",
-    data:{labels,datasets:[{label:"Clicks",data:clickData,backgroundColor:"#ff9900"}]},
-    options:{responsive:true,plugins:{legend:{display:false}}}
-  });
-
-  if(whatsappChart) whatsappChart.destroy();
-  whatsappChart = new Chart(document.getElementById("whatsappChart"),{
-    type:"bar",
-    data:{labels,datasets:[{label:"WhatsApp Orders",data:whatsappData,backgroundColor:"#4caf50"}]},
-    options:{responsive:true,plugins:{legend:{display:false}}}
-  });
-}
-
-// ================= INIT =================
-renderOverview();
-renderTopProducts();
-renderCountries();
-renderCharts();
-
-</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="dashboard.js"></script>
 </body>
 </html>

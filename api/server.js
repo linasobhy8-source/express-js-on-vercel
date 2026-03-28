@@ -1,5 +1,3 @@
-// api/server.js
-
 require('dotenv').config();
 
 const express = require('express');
@@ -81,7 +79,11 @@ app.get('/api/products', (req, res) => {
     };
   });
 
-  res.json(filtered);
+  res.status(200).json({
+    success: true,
+    total: filtered.length,
+    products: filtered
+  });
 });
 
 // ================= API: CHECK ENV =================
@@ -116,5 +118,11 @@ app.get('/', (req, res) => {
   res.send("🚀 Koloonline API Running on Vercel");
 });
 
-// ❗❗ أهم سطر
+// ❗❗ تصدير التطبيق
 module.exports = app;
+
+// ================= SERVER ENTRY (Vercel) =================
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+    }

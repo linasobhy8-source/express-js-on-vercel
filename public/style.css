@@ -1,16 +1,10 @@
-body{font-family:Arial;margin:0;background:#f5f5f5}
-header img{display:block;margin:0 auto}
-.hero{text-align:center;background:#fff;padding:25px}
-.navbar{display:flex;justify-content:space-between;padding:10px;background:#37475a;flex-wrap:wrap;position:relative}
-.navbar input{width:45%;padding:8px;border:none;border-radius:4px}
-.navbar button{background:#ff9900;border:none;padding:8px;border-radius:4px;font-weight:bold;cursor:pointer;margin:3px}
-#suggestions{position:absolute;top:45px;left:10px;background:#fff;width:45%;z-index:999;border-radius:6px;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
-.filters{text-align:center;padding:10px}
-.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;padding:20px}
-.card{background:#fff;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);overflow:hidden}
-.card img{width:100%;height:200px;object-fit:contain}
-.card-content{text-align:center;padding:10px}
-.card-content p{color:#b12704;font-weight:bold}
-.buy-btn{background:#ff9900;border:none;width:90%;margin:5px auto;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;font-weight:bold;cursor:pointer;border-radius:6px}
-.buy-btn img{height:18px}
-footer{background:#232f3e;color:#fff;text-align:center;padding:20px;margin-top:20px}
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4; color:#333;}
+header img { display:block; margin:0 auto; }
+.buy-btn { background:#232f3e; color:#fff; padding:10px 15px; border:none; margin:5px; cursor:pointer; border-radius:5px;}
+.buy-btn:hover { background:#1a202c; }
+.section { background:#fff; margin:20px auto; padding:20px; max-width:1000px; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1);}
+.products-container { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
+.product-card { background:#fafafa; padding:15px; border-radius:10px; width:220px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+.product-card img { width:100%; border-radius:10px; }
+.product-card h3 { font-size:18px; margin:10px 0; }
+.product-card button { margin-top:10px; }

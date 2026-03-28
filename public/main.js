@@ -1,4 +1,3 @@
-// PRODUCTS DATA (dummy real images & videos can be added)
 let products=[
 {title:"Smart Watch Pro",asin:"B09V7Z4TJG",price:39.99,category:"wearables",image:"https://m.media-amazon.com/images/I/61IMRs+o0iL._AC_SL1500_.jpg",video:"https://www.youtube.com/embed/Bwz8Tx75YU"},
 {title:"Wireless Earbuds",asin:"B08T5GJ2M7",price:29.99,category:"electronics",image:"https://m.media-amazon.com/images/I/71v9z1k4a7L._AC_SL1500_.jpg"},
@@ -10,7 +9,7 @@ let cart=JSON.parse(localStorage.getItem("cart"))||[];
 
 function displayProducts(list){
 let html="";
-list.forEach((p,i)=>{
+list.forEach(p=>{
 html+=`<div class="card">
 <img src="${p.image}">
 <div class="card-content">
@@ -20,8 +19,7 @@ html+=`<div class="card">
 ${p.video?`<iframe width="100%" height="200" src="${p.video}" frameborder="0" allowfullscreen></iframe>`:""}
 <button class="buy-btn" onclick='addToCart(${JSON.stringify(p)})'>Add to Cart</button>
 <button class="buy-btn" onclick='window.open("https://www.amazon.com/dp/${p.asin}?tag=koloonlinesto-20")'>🔥 Buy Now</button>
-</div>`;
-});
+</div>`;});
 document.getElementById("products").innerHTML=html;
 }
 

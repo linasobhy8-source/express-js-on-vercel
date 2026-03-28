@@ -5,7 +5,7 @@
 <title>🔥 Koloonline Store | Best Amazon Deals 2026</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Favicon -->
+<!-- Favicon / Logo -->
 <link rel="icon" href="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
 
 <!-- Google Analytics -->
@@ -28,14 +28,23 @@ fbq('init','353894198840203');fbq('track','PageView');
 </script>
 
 <style>
+/* Reset & base */
 body{font-family:Arial,sans-serif;margin:0;padding:0;background:#f5f5f5;}
-header{background:#232f3e;color:#fff;padding:15px 20px;font-size:24px;text-align:center;font-weight:bold;}
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;background:#37475a;color:#fff;}
-.navbar input{width:50%;padding:8px;border-radius:4px;border:none;font-size:16px;}
-.navbar button{padding:9px 15px;background:#ff9900;border:none;border-radius:4px;font-weight:bold;cursor:pointer;}
+header{background:#232f3e;color:#fff;padding:10px 20px;display:flex;align-items:center;gap:15px;font-size:22px;font-weight:bold;}
+header img{height:50px;width:auto;object-fit:contain;}
+
+/* Navbar */
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;background:#37475a;color:#fff;flex-wrap:wrap;}
+.navbar input{width:60%;padding:8px;border-radius:4px;border:none;font-size:16px;margin-bottom:5px;}
+.navbar button{padding:9px 15px;background:#ff9900;border:none;border-radius:4px;font-weight:bold;cursor:pointer;transition:0.3s;}
+.navbar button:hover{background:#e68a00;}
+
+/* Categories */
 .categories{display:flex;gap:10px;padding:10px;overflow-x:auto;}
 .categories button{padding:8px 15px;background:#ddd;border:none;border-radius:5px;cursor:pointer;transition:0.3s;}
 .categories button:hover{background:#ff9900;color:#fff;}
+
+/* Products grid */
 .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;padding:20px;}
 .card{background:#fff;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;transition:0.3s;}
 .card:hover{transform:scale(1.05);}
@@ -47,13 +56,18 @@ button.buy-btn{background:#ff9900;border:none;padding:12px;width:100%;border-rad
 button.buy-btn:hover{background:#e68a00;}
 .rating{display:flex;align-items:center;margin:5px 0;}
 .rating span{color:#ffa41c;margin-right:3px;}
+
+/* Slider */
 .slider{display:flex;overflow-x:auto;gap:15px;padding:10px;}
 .slider::-webkit-scrollbar{display:none;}
 </style>
 </head>
 <body>
 
-<header>🔥 Koloonline Store</header>
+<header>
+  <img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" alt="Koloonline Logo">
+  Koloonline Store
+</header>
 
 <div class="navbar">
   <input type="text" id="searchInput" placeholder="Search products..." onkeyup="liveSearch()">
@@ -118,7 +132,7 @@ function displaySlider(products) {
   slider.innerHTML = html;
 }
 
-// Handle Buy Now click
+// Buy Now
 function buyNow(link, title, price) {
   fbq('track','InitiateCheckout');
   gtag('event','begin_checkout', {items:[{name:title, price:price}]});
@@ -129,16 +143,16 @@ function buyNow(link, title, price) {
     body:JSON.stringify({title,link,price})
   });
   
-  window.open(link,"_blank"); // يفتح رابط الأفلييت مباشرة
+  window.open(link,"_blank");
 }
 
-// Live search function
+// Live search
 function liveSearch() {
   const query = document.getElementById("searchInput").value.toLowerCase();
   displayProducts(allProducts.filter(p => p.title.toLowerCase().includes(query)));
 }
 
-// Filter products by category
+// Filter category
 function filterCategory(cat) {
   if(cat === "all") displayProducts(allProducts);
   else displayProducts(allProducts.filter(p => p.category.toLowerCase() === cat.toLowerCase()));
@@ -148,7 +162,7 @@ function viewCart() {
   alert("Cart is empty!");
 }
 
-// Initialize
+// Init
 loadProducts();
 </script>
 

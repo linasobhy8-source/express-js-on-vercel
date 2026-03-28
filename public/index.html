@@ -2,26 +2,51 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Koloonline Store 2026</title>
-<meta name="description" content="Best Amazon deals, smart watches, gadgets and trending products.">
+<title>Koloonline Store 2026 | Best Smart Watches & Gadgets</title>
+<meta name="description" content="Discover top trending smart watches and gadgets in 2026. Buy directly from Amazon with affiliate tracking.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Open Graph & Twitter -->
+<!-- Open Graph -->
 <meta property="og:title" content="Koloonline Store 2026">
-<meta property="og:description" content="Best Amazon deals, smart watches, gadgets and trending products.">
+<meta property="og:description" content="Top trending smart watches and gadgets. Buy with affiliate links!">
 <meta property="og:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
 <meta property="og:url" content="https://www.koloonline.online">
-<meta property="og:site_name" content="Koloonline">
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:title" content="Koloonline Store 2026">
-<meta property="twitter:description" content="Best Amazon deals, smart watches, gadgets and trending products.">
-<meta property="twitter:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
+<meta property="og:site_name" content="Koloonline Store">
 
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Koloonline Store 2026">
+<meta name="twitter:description" content="Top trending smart watches and gadgets. Buy with affiliate links!">
+<meta name="twitter:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
+
+<!-- CSS -->
 <link rel="stylesheet" href="style.css">
 
 <!-- AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1294940976431468"
-crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1294940976431468" crossorigin="anonymous"></script>
+
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YS8L61XLPR"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-YS8L61XLPR');
+</script>
+
+<!-- FB Pixel -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', 'FB_PIXEL_ID');
+fbq('track', 'PageView');
+</script>
 
 </head>
 <body>
@@ -30,31 +55,57 @@ crossorigin="anonymous"></script>
   <img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" alt="Koloonline Logo" style="height:70px;">
 </header>
 
-<div class="hero">
-  <h2>Your Global Connection 🌍</h2>
-  <button onclick="scrollToProducts()" class="buy-btn">🔥 Shop Now</button>
+<!-- NAV -->
+<div style="text-align:center;margin:15px;">
+  <button onclick="location.href='index.html'" class="buy-btn">🏠 Home</button>
+  <button onclick="location.href='blog.html'" class="buy-btn">📰 Blog</button>
+  <button onclick="location.href='dashboard.html'" class="buy-btn">📊 Dashboard</button>
 </div>
 
-<div class="navbar">
-  <input type="text" id="searchInput" placeholder="Search products..." oninput="smartSuggest()">
-  <div id="suggestions"></div>
-  <button onclick="location.href='checkout.html'">Cart 🛒 (<span id="cartCount">0</span>)</button>
-</div>
+<!-- Products Section -->
+<section id="products" class="section">
+  <h1>🔥 Trending Products</h1>
+  <div class="products-container" id="products-container">
+    <!-- Dynamically loaded products via JS -->
+  </div>
+</section>
 
-<div class="filters">
-  <button onclick="filterCategory('all')">All</button>
-  <button onclick="filterCategory('electronics')">Electronics</button>
-  <button onclick="filterCategory('wearables')">Wearables</button>
-  <button onclick="filterCategory('kitchen')">Kitchen</button>
-</div>
+<!-- Products Details Section -->
+<section id="product-details" class="section">
+<h2>Products Details</h2>
+<ul>
+  <li>Improve your room humidity naturally</li>
+  <li>Product details - available in different colors</li>
+  <li>What included</li>
+  <li>This is only training you'll ever need</li>
+  <li>The personalized gifts that only you have</li>
+</ul>
+</section>
 
-<div id="products" class="products"></div>
+<!-- FAQ Section -->
+<section id="faq" class="section">
+<h2>FAQ - Frequently Asked Questions</h2>
+<p>Contact us for more info.</p>
+</section>
 
-<footer>
-  <img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" style="height:30px"><br>
-  <p>© 2026 Koloonline</p>
-</footer>
+<!-- Featured Products -->
+<section id="featured" class="section">
+<h2>Products Featured</h2>
+<ul>
+  <li>Light weight flexibility</li>
+  <li>Reliable stability</li>
+  <li>Nike × Metcon 3</li>
+  <li>This product features top quality materials</li>
+</ul>
+</section>
+
+<!-- Customer Reviews -->
+<section id="reviews" class="section">
+<h2>Customer Reviews</h2>
+<div id="reviews-container"></div>
+</section>
 
 <script src="main.js"></script>
+
 </body>
 </html>

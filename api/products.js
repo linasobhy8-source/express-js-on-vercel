@@ -1,3 +1,4 @@
+// pages/api/products.js
 export default function handler(req, res) {
   const products = [
     {
@@ -7,7 +8,7 @@ export default function handler(req, res) {
       price: "$39.99",
       rating: 4.7,
       image: "https://m.media-amazon.com/images/I/61IMRs+o0iL._AC_SL1500_.jpg",
-      affiliate_link: "https://www.amazon.com/dp/B09V7Z4TJG?tag=koloonlinesto-20"
+      affiliate_link: "https://www.amazon.com/dp/B09V7Z4TJG"
     },
     {
       id: 2,
@@ -16,11 +17,51 @@ export default function handler(req, res) {
       price: "$49.99",
       rating: 4.8,
       image: "https://m.media-amazon.com/images/I/71tV4O0rO0L._AC_SL1500_.jpg",
-      affiliate_link: "https://www.amazon.com/dp/B07ZNT7PRL?tag=koloonlinesto-20"
+      affiliate_link: "https://www.amazon.com/dp/B07ZNT7PRL"
+    },
+    {
+      id: 3,
+      title: "Air Fryer 5L",
+      category: "kitchen",
+      price: "$59.99",
+      rating: 4.6,
+      image: "https://m.media-amazon.com/images/I/81v8b8h50EL._AC_SL1500_.jpg",
+      affiliate_link: "https://www.amazon.com/dp/B08CVL1SV6"
+    },
+    {
+      id: 4,
+      title: "Home LED Lamp",
+      category: "home",
+      price: "$19.99",
+      rating: 4.2,
+      image: "https://m.media-amazon.com/images/I/61HqX8pU7FL._AC_SL1500_.jpg",
+      affiliate_link: "https://www.amazon.com/dp/B08XYT4JX7"
     }
-    // أضف أي منتجات أخرى هنا
   ];
 
-  const country = req.query.country || "us";
-  res.status(200).json(products);
-}
+  const { country = "US", category, search } = req.query;
+
+  let filtered = products;
+
+  // فلترة حسب الفئة
+  if (category && category !== "all") {
+    filtered = filtered.filter(p => p.category.toLowerCase() === category.toLowerCase());
+  }
+
+  // فلترة حسب البحث
+  if (search) {
+    const q = search.toLowerCase();
+    filtered = filtered.filter(p => p.title.toLowerCase().includes(q));
+  }
+
+  // ربط روابط الأفلييت حسب البلد من .env
+  filtered = filtered.map(p => {
+    const tag = process.env[`AMAZON_${country.toUpperCase()}`];
+    return {
+      ...p,
+      affiliate_link: tag ? `${p.affiliate_link}?tag=${tag}` : p.affiliate_link
+    };
+  });
+
+  res.status(200).json(filtered);
+      }

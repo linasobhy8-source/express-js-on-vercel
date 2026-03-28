@@ -2,41 +2,30 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Koloonline Dashboard | Analytics</title>
-
-<meta name="description" content="Koloonline Dashboard - Track clicks, cart additions, WhatsApp orders, and conversions in real-time.">
+<title>Dashboard | Koloonline Store</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Koloonline Dashboard - Analytics">
-<meta name="twitter:description" content="Monitor affiliate product clicks, cart additions, and WhatsApp orders with Koloonline Dashboard.">
-<meta name="twitter:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
-
-<!-- Open Graph -->
-<meta property="og:title" content="Koloonline Dashboard - Analytics">
-<meta property="og:description" content="Monitor affiliate product clicks, cart additions, and WhatsApp orders with Koloonline Dashboard.">
-<meta property="og:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
-<meta property="og:url" content="https://www.koloonline.online/dashboard.html">
-<meta property="og:site_name" content="Koloonline Dashboard">
-<meta property="og:type" content="website">
-
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1294940976431468" crossorigin="anonymous"></script>
-
 <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
+
 <header style="background:#232f3e; padding:15px; text-align:center;">
-<img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" alt="Koloonline Logo" style="height:70px;">
-<h2>Dashboard Analytics</h2>
+<img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" style="height:70px;">
 </header>
 
-<div id="overview" class="dashboard-section"></div>
-<div id="topProducts" class="dashboard-section"></div>
-<canvas id="clickChart" style="width:100%; max-width:900px; margin:auto;"></canvas>
+<h2 style="text-align:center;margin:20px">📊 Sales Dashboard</h2>
+<canvas id="salesChart" style="max-width:600px;margin:auto"></canvas>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="dashboard.js"></script>
+<script>
+let soldProducts=JSON.parse(localStorage.getItem("soldProducts"))||[];
+let labels=soldProducts.map(p=>p.title);
+let data=soldProducts.map(p=>p.price);
+new Chart(document.getElementById("salesChart"),{
+type:'bar',
+data:{labels:labels,datasets:[{label:'Sales $',data:data,backgroundColor:'#ff9900'}]},
+options:{responsive:true,plugins:{legend:{display:false}}}
+});
+</script>
+
 </body>
 </html>

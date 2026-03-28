@@ -17,10 +17,12 @@
 <meta property="twitter:description" content="Best Amazon deals, smart watches, gadgets and trending products.">
 <meta property="twitter:image" content="https://i.postimg.cc/9fVfC1Y4/1000276862.png">
 
-<!-- Google AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1294940976431468" crossorigin="anonymous"></script>
-
 <link rel="stylesheet" href="style.css">
+
+<!-- AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1294940976431468"
+crossorigin="anonymous"></script>
+
 </head>
 <body>
 
@@ -30,15 +32,13 @@
 
 <div class="hero">
   <h2>Your Global Connection 🌍</h2>
-  <button onclick="scrollToProducts()" class="buy-btn">
-    🔥 Shop Now
-  </button>
+  <button onclick="scrollToProducts()" class="buy-btn">🔥 Shop Now</button>
 </div>
 
 <div class="navbar">
-  <input type="text" id="searchInput" placeholder="Search..." oninput="smartSuggest()">
+  <input type="text" id="searchInput" placeholder="Search products..." oninput="smartSuggest()">
   <div id="suggestions"></div>
-  <button>Cart 🛒 (<span id="cartCount">0</span>)</button>
+  <button onclick="location.href='checkout.html'">Cart 🛒 (<span id="cartCount">0</span>)</button>
 </div>
 
 <div class="filters">
@@ -49,9 +49,6 @@
 </div>
 
 <div id="products" class="products"></div>
-
-<!-- Checkout Page Trigger -->
-<button onclick="location.href='checkout.html'" class="buy-btn" style="margin:20px auto; display:block;">Go to Checkout</button>
 
 <footer>
   <img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" style="height:30px"><br>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Checkout | Koloonline Store</title>
+<meta name="description" content="Complete your purchase securely.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header style="background:#232f3e; padding:15px; text-align:center;">
+  <img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" alt="Koloonline Logo" style="height:70px;">
+</header>
+
+<section class="section">
+  <h1>🛒 Checkout</h1>
+  <form id="checkout-form">
+    <label>Name</label><br>
+    <input type="text" name="name" required><br>
+    <label>Email</label><br>
+    <input type="email" name="email" required><br>
+    <label>Product</label><br>
+    <select name="product" required>
+      <option value="Smart Watch Pro">Smart Watch Pro</option>
+      <option value="Wireless Earbuds">Wireless Earbuds</option>
+    </select><br>
+    <button type="submit" class="buy-btn">Place Order</button>
+  </form>
+</section>
+
+<script>
+document.getElementById('checkout-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  // Redirect to thankyou page
+  window.location.href='thankyou.html';
+});
+</script>
+
+</body>
+</html>

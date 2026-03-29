@@ -1,4 +1,3 @@
-// pages/index.js
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
@@ -10,7 +9,8 @@ export default function Home() {
     fetch("/api/products?country=US")
       .then(res => res.json())
       .then(data => {
-        setProducts(data.products || []);
+        // API بيرجع المفتاح باسم data
+        setProducts(data.data || []);
         setLoading(false);
       })
       .catch(err => {
@@ -82,20 +82,12 @@ export default function Home() {
                 <img
                   src={p.image}
                   alt={p.title}
-                  style={{
-                    width: "100%",
-                    height: "200px",
-                    objectFit: "cover"
-                  }}
+                  style={{ width: "100%", height: "200px", objectFit: "cover" }}
                 />
 
                 <h3>{p.title}</h3>
-
-                <p>⭐ {p.rating || "4.0"} </p>
-
-                <p style={{ fontWeight: "bold", color: "#111" }}>
-                  {p.price}
-                </p>
+                <p>⭐ {p.rating || "4.0"}</p>
+                <p style={{ fontWeight: "bold", color: "#111" }}>{p.price || "$0.00"}</p>
 
                 <button
                   onClick={() => window.open(p.affiliate_link, "_blank")}

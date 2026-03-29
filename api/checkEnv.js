@@ -34,11 +34,11 @@ export default function handler(req, res) {
     });
 
   } catch (error) {
-    console.error("❌ /api/checkEnv error:", error);
-
+    console.error("Error in /api/checkEnv:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error"
+      message: "Internal Server Error",
+      error: error.message
     });
   }
 }

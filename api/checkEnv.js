@@ -1,5 +1,3 @@
-// pages/api/checkEnv.js
-
 export default function handler(req, res) {
   try {
     const envKeys = [
@@ -15,16 +13,13 @@ export default function handler(req, res) {
     const results = {};
     const missing = [];
 
-    envKeys.forEach((key) => {
+    envKeys.forEach(key => {
       const exists = !!process.env[key];
       results[key] = exists;
-
-      if (!exists) {
-        missing.push(key);
-      }
+      if (!exists) missing.push(key);
     });
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: "Environment variables status",
       total: envKeys.length,
@@ -32,13 +27,11 @@ export default function handler(req, res) {
       missing,
       keys: results
     });
-
   } catch (error) {
     console.error("Error in /api/checkEnv:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      message: "Internal Server Error",
-      error: error.message
+      message: "Internal Server Error"
     });
   }
 }

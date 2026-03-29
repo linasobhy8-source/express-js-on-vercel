@@ -2,13 +2,20 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const { SpeedInsights } = require('@vercel/speed-insights');
 
 const app = express();
 
 // ================= MIDDLEWARE =================
 app.use(cors());
 app.use(express.json());
+
+// ================= CHECK REQUIRED ENV =================
+const requiredEnv = ["AMAZON_US", "AMAZON_CA", "AMAZON_EG"];
+requiredEnv.forEach(key => {
+  if (!process.env[key]) {
+    console.warn(`⚠️ Warning: ${key} is not defined`);
+  }
+});
 
 // ================= DUMMY PRODUCTS =================
 const products = [
@@ -52,50 +59,44 @@ const products = [
 
 // ================= API: PRODUCTS =================
 app.get('/api/products', (req, res) => {
-  const { country, category, search } = req.query;
-
-  let filtered = [...products];
-
-  // فلترة category
-  if (category && category !== "all") {
-    filtered = filtered.filter(p =>
-      p.category.toLowerCase() === category.toLowerCase()
-    );
-  }
-
-  // فلترة search
-  if (search) {
-    const q = search.toLowerCase();
-    filtered = filtered.filter(p =>
-      p.title.toLowerCase().includes(q)
-    );
-  }
-
-  // تحديد Affiliate Tag حسب الدولة
-  filtered = filtered.map(p => {
-    const tag = process.env[`AMAZON_${(country || "US").toUpperCase()}`];
-    return {
-      ...p,
-      affiliate_link: tag ? `${p.base_link}?tag=${tag}` : p.base_link
-    };
-  });
-
-  res.status(200).json({
-    success: true,
-    total: filtered.length,
-    products: filtered
-  });
-});
-
-// ================= API: SPEED INSIGHTS =================
-app.get('/api/speed', async (req, res) => {
   try {
-    const url = req.query.url || "https://shop.koloonline.online"; // رابط الموقع
-    const result = await SpeedInsights(url, { strategy: "mobile" });
-    res.status(200).json(result);
+    const { country, category, search } = req.query;
+
+    let filtered = [...products];
+
+    // فلترة category
+    if (category && category !== "all") {
+      filtered = filtered.filter(p =>
+        p.category.toLowerCase() === category.toLowerCase()
+      );
+    }
+
+    // فلترة search
+    if (search) {
+      const q = search.toLowerCase();
+      filtered = filtered.filter(p =>
+        p.title.toLowerCase().includes(q)
+      );
+    }
+
+    // Affiliate
+    filtered = filtered.map(p => {
+      const tag = process.env[`AMAZON_${(country || "US").toUpperCase()}`];
+      return {
+        ...p,
+        affiliate_link: tag ? `${p.base_link}?tag=${tag}` : p.base_link
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      total: filtered.length,
+      products: filtered
+    });
+
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch speed insights" });
+    console.error("❌ Products API Error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -109,8 +110,7 @@ app.get('/api/checkEnv', (req, res) => {
     "AMAZON_US",
     "AMAZON_CA",
     "AMAZON_EG",
-    "SECRET_KEY",
-    "VERCEL_TOKEN"
+    "SECRET_KEY"
   ];
 
   const results = {};
@@ -120,21 +120,22 @@ app.get('/api/checkEnv', (req, res) => {
 
   res.status(200).json({
     status: "success",
-    message: "Environment keys check",
     results
   });
 });
 
 // ================= ROOT =================
 app.get('/', (req, res) => {
-  res.send("🚀 Koloonline API Running on Vercel");
+  res.send("🚀 Koloonline API Running Successfully");
 });
 
-// ❗❗ تصدير التطبيق
+// ================= EXPORT =================
 module.exports = app;
 
-// ================= SERVER ENTRY (Vercel) =================
+// ================= SERVER (LOCAL ONLY) =================
 if (require.main === module) {
   const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-      }
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+  });
+        }

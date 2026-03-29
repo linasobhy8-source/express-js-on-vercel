@@ -1,29 +1,27 @@
-// api/orders.js
-
 import { MongoClient } from "mongodb";
 
-// ================= MONGODB CLIENT =================
-const client = new MongoClient(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// ================= GLOBAL CONNECTION (Vercel Fix) =================
+let client;
+let clientPromise;
 
-let db = null;
-
-async function connectDB() {
-  if (!db) {
-    if (!client.isConnected?.()) {
-      await client.connect();
-    }
-    db = client.db("koloonline"); // اسم قاعدة البيانات
-  }
-  return db;
+if (!process.env.MONGODB_URI) {
+  throw new Error("❌ Please define MONGODB_URI in Environment Variables");
 }
+
+const uri = process.env.MONGODB_URI;
+
+if (!global._mongoClientPromise) {
+  client = new MongoClient(uri);
+  global._mongoClientPromise = client.connect();
+}
+
+clientPromise = global._mongoClientPromise;
 
 // ================= API HANDLER =================
 export default async function handler(req, res) {
   try {
-    const db = await connectDB();
+    const client = await clientPromise;
+    const db = client.db("koloonline");
     const ordersCollection = db.collection("orders");
 
     // ================= CREATE ORDER =================
@@ -46,6 +44,7 @@ export default async function handler(req, res) {
       };
 
       const result = await ordersCollection.insertOne(order);
+
       return res.status(201).json({
         status: "success",
         message: "Order created successfully",
@@ -78,12 +77,14 @@ export default async function handler(req, res) {
       status: "error",
       message: `Method ${req.method} Not Allowed`,
     });
+
   } catch (err) {
-    console.error("Orders API Error:", err);
+    console.error("❌ Orders API Error:", err);
+
     return res.status(500).json({
       status: "error",
       message: "Internal Server Error",
       error: err.message,
     });
   }
-      }
+}

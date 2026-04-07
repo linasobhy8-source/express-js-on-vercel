@@ -2,17 +2,16 @@ import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
+import products from './products.js' // أو products.ts إذا استخدمتي TS بالكامل
 
 dotenv.config() // تحميل مفاتيح .env
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-import products from './products.js' // افترضنا إنه ملف JS يصدر المصفوفة
-
 const app = express()
 app.use(express.json())
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, 'public')))
 
 const PORT = process.env.PORT || 3000
 
@@ -37,8 +36,8 @@ app.get('/', (req, res) => {
 
 // API: Products
 app.get('/api/products', (req, res) => {
-  const country = req.query.country || 'us'
-  // هنا ممكن تضيفي فلترة حسب country لو حبيتي
+  const country = (req.query.country || 'us').toLowerCase()
+  // يمكن الفلترة حسب country لاحقًا
   res.json(products)
 })
 
@@ -50,7 +49,7 @@ app.get('/healthz', (req, res) => {
   })
 })
 
-// Test env keys
+// Check environment keys
 app.get('/api/check-env', (req, res) => {
   const keys = [
     'SERPAPI_KEY',
@@ -63,12 +62,8 @@ app.get('/api/check-env', (req, res) => {
     'SECRET_KEY',
     'VERCEL_TOKEN'
   ]
-
-  const results = {}
-  keys.forEach(key => {
-    results[key] = !!process.env[key]
-  })
-
+  const results: Record<string, boolean> = {}
+  keys.forEach(key => results[key] = !!process.env[key])
   res.status(200).json({ status: 'success', results })
 })
 

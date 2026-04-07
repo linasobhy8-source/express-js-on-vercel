@@ -4,6 +4,12 @@
 node_modules/
 
 # =========================
+# Build output (TypeScript)
+# =========================
+dist/
+build/
+
+# =========================
 # Environment variables (API keys, DB connection strings, etc.)
 # =========================
 .env
@@ -16,6 +22,7 @@ node_modules/
 .vercel/
 .vercel_build_output/
 .vercel_cache/
+.vercel/output/
 
 # =========================
 # Logs and temporary files
@@ -42,3 +49,8 @@ Desktop.ini
 .idea/
 .vscode/
 *.code-workspace
+
+# =========================
+# Miscellaneous
+# =========================
+.cache/

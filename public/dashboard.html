@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard | Koloonline Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header style="background:#232f3e; padding:15px; text-align:center;">
+<img src="https://i.postimg.cc/9fVfC1Y4/1000276862.png" style="height:70px;">
+</header>
+
+<h2 style="text-align:center;margin:20px">📊 Sales Dashboard</h2>
+<canvas id="salesChart" style="max-width:600px;margin:auto"></canvas>
+
+<script>
+let soldProducts=JSON.parse(localStorage.getItem("soldProducts"))||[];
+let labels=soldProducts.map(p=>p.title);
+let data=soldProducts.map(p=>p.price);
+new Chart(document.getElementById("salesChart"),{
+type:'bar',
+data:{labels:labels,datasets:[{label:'Sales $',data:data,backgroundColor:'#ff9900'}]},
+options:{responsive:true,plugins:{legend:{display:false}}}
+});
+</script>
+
+</body>
+</html>
